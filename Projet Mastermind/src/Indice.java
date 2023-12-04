@@ -1,2 +1,5 @@
-package PACKAGE_NAME;public enum Indice {
+public enum Indice {
+    NOIR,
+    BLANC,
+    VIDE
 }

@@ -1,2 +1,10 @@
-package PACKAGE_NAME;public class Couleurs {
+public enum Couleurs {
+    BLEU,
+    ORANGE,
+    ROUGE,
+    VERT,
+    VIOLET,
+    MAJENTA,
+    NOIR,
+    BLANC
 }
