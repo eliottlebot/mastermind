@@ -29,36 +29,21 @@ package models
 
     class Manche
     {
-        -nbPionsDispo: Integer
-        -nbPionsCombinaison: Integer
-        -nbPionsTentative: Integer
-
-        +startManche()
-        +setStrategy(strategy: Indice)
+        +<<create>>Manche(tailleCombinaison : Integer, nombreTentatives : Integer)
+        +genererCombinaisonAleatoire()
+        +getCombinaisonAleatoire()
+        +verifierCombinaisonJoueurInt(tentative : Tentative)
+        +verifierCombinaisonIndices(tentative : Tentative)
+        +couleurDansCombinaison(combinaisonSecrete : CouleurPion[*], couleur : CouleurPion) : Boolean
     }
-
-
-    class Combinaison
-    {
-        +<<Create>> Combinaison(pions: Pion[*])
-        +createSecretCombinaison(): Combinaison
-        +compareCombinaisons(combinaison Combinaison): Integer[*]
-    }
-
-
-    class Pion
-    {
-        +<<Create>> Pion(couleur: CouleurPion)
-    }
-
 
     class Tentative
     {
-        -combinaisonJoueur: Combinaison
-
+        - pionsBienPlaces : Integer
+        +<<create>>Tentative(tailleCombinaison : Integer)
         +validerCombinaison()
-
-
+        +augmentePionsBienPlace()
+        +setIndicesCouleurs()
     }
 
 
@@ -96,20 +81,11 @@ package models
         +VERT
         +BLEU
         +VIOLET
-        +NOIR
-        +BLANC
         +ORANGE
-    }
-
-
-    enum Indices <<enumeration>>
-    {
         +NOIR
         +BLANC
         +RIEN
     }
-
-
 
 
     class Joueur
@@ -150,15 +126,15 @@ ViewEnd ..|> PartieObserver
 
 Plateau "1" *--> "1 -partie" Partie
 Partie "1" *--> "*\n -manche" Manche
-Manche "1" o--> "1 \n -combinaisonSecrete" Combinaison
 
 Partie "*" o--> "*\n-listeObservers" PartieObserver: observe <
 Manche "*" o--> "*\n-listeObservers" PartieObserver: observe <
-Manche "*" *--> "*\n-listeTentative" Tentative
-Combinaison "*" o--> "1 \n-combinaison" Pion: estComposée >
+Manche "*" *--> "*\n-listeTentative[*]" Tentative
 Manche " 1 " o-> "1\n -strategy" Indice : selectionne >
+Manche *--->"1 \n-combinaisonSecrète[*]" CouleurPion : Possède >
 
-Pion "1" *-> "1 \n-couleur" CouleurPion : Possède >
 
+Tentative *--->"1 \n-combinaisonJoueur[*]" CouleurPion : Possède >
+Tentative *--->"1 \n-indices[*]" CouleurPion : Possède >
 
 @enduml
