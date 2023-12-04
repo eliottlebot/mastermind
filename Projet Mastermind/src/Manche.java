@@ -10,7 +10,6 @@ public class Manche {
     private int score = 0;
 
 
-
     public Manche(Integer tailleCombinaison, Integer nombreTentatives){
         this.tailleCombinaison = tailleCombinaison;
         combinaisonSecrete = new Couleurs[tailleCombinaison];
@@ -32,9 +31,6 @@ public class Manche {
     public Couleurs[] getCombinaisonSecrete(){
         return combinaisonSecrete;
     }
-
-
-
 
 
 
@@ -69,13 +65,19 @@ public class Manche {
     //----------------------------------------------
     public void verifierCombinaisonJoueurInt()
     {
+        boolean finished = true;
         for(int i = 0; i<combinaisonSecrete.length; i++)
         {
             if(combinaisonSecrete[i]==tentativeActuelle.getTentative()[i])
             {
                 tentativeActuelle.augmentePionsBienPlace();
             }
+            else{
+                finished = false;
+            }
         }
+
+        this.isFinished = finished;
     }
     public void verifierCombinaisonIndices(){
         //On parcourt la combinaison secrète en vérifiant deux choses :
@@ -101,7 +103,7 @@ public class Manche {
             }
         }
 
-        isFinished = finished;
+        this.isFinished = finished;
     }
     public Boolean couleurDansCombinaison(Couleurs[] combinaisonSecrete, Couleurs couleur){
         for(Couleurs couleursSec : combinaisonSecrete){
@@ -120,11 +122,6 @@ public class Manche {
     public void upgradeScore()
     {
         score++;
-    }
-
-    public void upgradScore(int nb)
-    {
-        score += nb;
     }
 
     public int getScore()
