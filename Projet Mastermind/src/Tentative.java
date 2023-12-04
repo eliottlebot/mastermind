@@ -1,25 +1,36 @@
 public class Tentative {
-    private Couleurs[] combinaisonJoueur;
+    private Couleurs[] tentative;
     public Indice[] indices;
     public int pionsBienPlaces;
 
 
     public Tentative(int tailleCombinaison) {
-        combinaisonJoueur = new Couleurs[tailleCombinaison];
+        tentative = new Couleurs[tailleCombinaison];
         indices = new Indice[tailleCombinaison];
         pionsBienPlaces=0;
     }
 
-    public Couleurs[] getCombinaisonJoueur(){
-        return combinaisonJoueur;
+    public Tentative()
+    {
+
     }
 
-    public void rempliCombinaisonJoueur(){
-        for(int i =0; i<combinaisonJoueur.length; i++){
-            Couleurs couleur = Couleurs.BLEU;
-            combinaisonJoueur[i]=couleur;
-        }
+    public void setTentative(Couleurs[] tentative)
+    {
+        this.tentative = tentative;
     }
+
+    public Couleurs[] getTentative()
+    {
+        return this.tentative;
+    }
+
+    public Indice[] getIndices()
+    {
+        return this.indices;
+    }
+
+
 
     public void augmentePionsBienPlace(){
         this.pionsBienPlaces++;

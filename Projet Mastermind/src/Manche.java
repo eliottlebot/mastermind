@@ -3,30 +3,58 @@ import java.util.*;
 
 public class Manche {
     private Couleurs[] combinaisonSecrete;
-    private Tentative[] tentatives;
+    private int nbTentativesMax;
+    private int tailleCombinaison;
+    private Tentative tentativeActuelle;
+    private boolean isFinished = false;
+    private int score = 0;
+
+
+
     public Manche(Integer tailleCombinaison, Integer nombreTentatives){
+        this.tailleCombinaison = tailleCombinaison;
         combinaisonSecrete = new Couleurs[tailleCombinaison];
-        tentatives = new Tentative[nombreTentatives];
+        nbTentativesMax = nombreTentatives;
     }
+
+    public Tentative createTentative(int i)
+    {
+        Tentative tenta = new Tentative(tailleCombinaison);
+        this.tentativeActuelle = tenta;
+        return tenta;
+    }
+
+    public Tentative getTentativeActuelle()
+    {
+        return this.tentativeActuelle;
+    }
+
     public Couleurs[] getCombinaisonSecrete(){
         return combinaisonSecrete;
     }
 
 
+
+
+
+
     //----------------------------------------------
     //Générer la combinaison aléatoire de la manche
     //----------------------------------------------
-    public void genererCombinaisonAleatoire(){
+    public void genererCombinaisonAleatoire()
+    {
         Random rnd = new Random();
         int temp;
         //On crée la liste des couleurs disponibles pour la combinaison secrète
         List<Couleurs> dispo = new ArrayList<>();
-        for(int j = 0; j<combinaisonSecrete.length; j++){
+
+        for(int j = 0; j<tailleCombinaison; j++)
+        {
             dispo.add(Couleurs.values()[j]);
         }
 
         //La liste de couleurs disponibles est créée, on peut mtn créer notre combinaison secrète
-        for(int i =0; i<combinaisonSecrete.length; i++){
+        for(int i =0; i<tailleCombinaison; i++){
             temp = rnd.nextInt(dispo.size());
             combinaisonSecrete[i]=dispo.get(temp);
             dispo.remove(temp);
@@ -35,32 +63,45 @@ public class Manche {
 
 
 
+
     //----------------------------------------------
     //Fonctions de vérification (calcul)
     //----------------------------------------------
-    public void verifierCombinaisonJoueurInt(Tentative tentative){
-        for(int i = 0; i<combinaisonSecrete.length; i++){
-            if(combinaisonSecrete[i]==tentative.getCombinaisonJoueur()[i]){
-                tentative.augmentePionsBienPlace();
+    public void verifierCombinaisonJoueurInt()
+    {
+        for(int i = 0; i<combinaisonSecrete.length; i++)
+        {
+            if(combinaisonSecrete[i]==tentativeActuelle.getTentative()[i])
+            {
+                tentativeActuelle.augmentePionsBienPlace();
             }
         }
     }
-    public void verifierCombinaisonIndices(Tentative tentative){
+    public void verifierCombinaisonIndices(){
         //On parcourt la combinaison secrète en vérifiant deux choses :
         //Si la couleur est la bonne, on donne la couleur Noir au bon index
         //Sinon, on regarde si la couleur est quand même dans la combi secrète
         //Auquel cas on mettra un Blanc, sinon on ne met rien
-        for(int i = 0; i<combinaisonSecrete.length; i++){
-            if(combinaisonSecrete[i]==tentative.getCombinaisonJoueur()[i]){
-                tentative.setIndicesCouleurs(Indice.NOIR, i);
+        boolean finished = true;
+        for(int i = 0; i<combinaisonSecrete.length; i++)
+        {
+            if(combinaisonSecrete[i]==tentativeActuelle.getTentative()[i])
+            {
+                tentativeActuelle.setIndicesCouleurs(Indice.NOIR, i);
             }
-            else if(couleurDansCombinaison(combinaisonSecrete, tentative.getCombinaisonJoueur()[i])){
-                tentative.setIndicesCouleurs(Indice.BLANC, i);
+            else if(couleurDansCombinaison(combinaisonSecrete, tentativeActuelle.getTentative()[i]))
+            {
+                tentativeActuelle.setIndicesCouleurs(Indice.BLANC, i);
+                finished = false;
             }
-            else{
-                tentative.setIndicesCouleurs(Indice.VIDE, i);
+            else
+            {
+                tentativeActuelle.setIndicesCouleurs(Indice.VIDE, i);
+                finished = false;
             }
         }
+
+        isFinished = finished;
     }
     public Boolean couleurDansCombinaison(Couleurs[] combinaisonSecrete, Couleurs couleur){
         for(Couleurs couleursSec : combinaisonSecrete){
@@ -69,5 +110,25 @@ public class Manche {
             }
         }
         return false;
+    }
+
+    public boolean isFinished()
+    {
+        return this.isFinished;
+    }
+
+    public void upgradeScore()
+    {
+        score++;
+    }
+
+    public void upgradScore(int nb)
+    {
+        score += nb;
+    }
+
+    public int getScore()
+    {
+        return this.score;
     }
 }
