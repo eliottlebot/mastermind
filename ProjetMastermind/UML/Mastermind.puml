@@ -26,11 +26,9 @@ package models
         -nbManches: Integer
         -nbPionsDispo: Integer
         -score: Integer
-
         +<<create>>Partie(nbManches : Integer, nbPionsDispo : Integer, tailleCombinaison : Integer, nbTentatives : Integer)
         +startPartie()
         +createManche(tailleCombinaison : Integer, nbTentatives: Integer): Manche
-        +getMancheActuelle() : Manche
         +upgradeScore()
         +getScore()
         +setAffichage()
@@ -45,12 +43,10 @@ package models
         +<<create>>Manche(tailleCombinaison : Integer, nombreTentatives : Integer)
         +startManche()
         +skipManche()
-        +genererCombinaisonSecrete()
-        +getCombinaisonSecrete()
         +createTentative(i : Integer) : Tentative
+        +getCombinaisonSecrete() : Combinaison
         +verifierCombinaisonJoueurInt(tentative : Tentative)
         +verifierCombinaisonIndices(tentative : Tentative)
-        +couleurDansCombinaison(combinaisonSecrete : CouleurPion[*], couleur : CouleurPion) : Boolean
         +upgradeScore()
         +getScore()
     }
@@ -62,9 +58,19 @@ package models
         +validerCombinaison()
         +augmentePionsBienPlace()
         +setIndicesCouleurs()
-        +setCouleurIndex()
-        +resetCombinaison()
-        +getIndice()
+        +setCouleurIndex(combinaison : Combinaison, couleur : CouleurPion, index : Integer)
+        +getIndice() : Indice[*]
+        +getCombinaisonJoueur() : Combinaison
+    }
+
+    class Combinaison{
+        +genererCombinaisonSecrete()
+        +couleurDansCombinaison(couleur : CouleurPion) : Boolean
+        +reset()
+    }
+
+    class Indice{
+
     }
 
 
@@ -77,7 +83,7 @@ package models
 
     interface IndiceStrategy <<interface>>
     {
-        
+
     }
 
 
@@ -108,7 +114,7 @@ package models
         +RIEN
     }
 
-    enum Indice <<enumeration>>{
+    enum IndiceCouleur <<enumeration>>{
         +NOIR
         +BLANC
         +RIEN
@@ -157,17 +163,19 @@ package controller
 
 Plateau "1" *--> "1 -partie" Partie : Crée >
 Plateau *-left-> "1 -joueur" Joueur : Crée >
-Partie "1" *--> "*\n -manche" Manche
+Partie *---> "*\n -manche" Manche : Crée >
 
 Partie "*" o--> "*\n-listeObservers" PartieObserver: observe <
 Manche "*" o--> "*\n-listeObservers" PartieObserver: observe <
 Manche *--> Tentative : Crée
-Manche " 1 " o--> "1\n -strategy" IndiceStrategy : selectionne >
-Manche *--->"1 \n-combinaisonSecrète[*]" CouleurPion : Possède >
+Manche " 1 " o-left-> "1\n -strategy" IndiceStrategy : selectionne >
+Manche *--->"1 \n-combinaisonSecrète" Combinaison : Possède >
 
 
-Tentative *--->"1 \n-combinaisonJoueur[*]" CouleurPion : Possède >
-Tentative *--->"1 \n-indices[*]" Indice : Possède >
+Tentative *--->"1 \n-combinaisonJoueur" Combinaison : Possède >
+Tentative *--->"1 \n-indices" Indice : Possède >
+
+Combinaison o--> "4..6\n-couleurs"CouleurPion
 
 ViewGame o-up-> "1\n -controller" GameController
 ViewEnd o-up-> "1\n -controller" GameController
