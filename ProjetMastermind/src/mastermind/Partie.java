@@ -1,3 +1,4 @@
+package mastermind;
 import java.util.Scanner;
 public class Partie {
     private int nbManches;
@@ -22,11 +23,6 @@ public class Partie {
         mancheActuelle = manche;
         manche.genererCombinaisonAleatoire();
         return manche;
-    }
-
-    public Manche getMancheActuelle()
-    {
-        return this.mancheActuelle;
     }
 
     public void upgradeScore(int nb)

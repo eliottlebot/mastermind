@@ -1,10 +1,15 @@
-import java.util.ArrayList;
-import java.util.List;
+package mastermind;
+
 import java.util.Scanner;
+public class GameController {
+    public GameController()
+    {
 
-public class Main {
-    public static void main(String[] args) {
+    }
 
+
+    public void gameStart()
+    {
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("Nombre de manches : ");
@@ -40,7 +45,7 @@ public class Main {
         {
             //création de la manche
             Manche manche = partie.createManche(i);
-            System.out.println("\n\t--- Manche n°" + i + " ---\n");
+            System.out.println("\n\t--- mastermind.Manche n°" + i + " ---\n");
             for(int j = 0; j < nbTentatives && !manche.isFinished(); j++)
             {
                 //augmenter le score
@@ -61,12 +66,12 @@ public class Main {
                 //afficher l'indice (jpense t'avais capté sans le commentaire)
                 afficherTableauIndices(indice);
             }
-            System.out.println("\t---- Manche terminée avec comme score : " + manche.getScore() + "----\n\n");
+            System.out.println("\t---- mastermind.Manche terminée avec comme score : " + manche.getScore() + "----\n\n");
             partie.upgradeScore(manche.getScore());
         }
         System.out.println("--- Partie terminée avec comme score : " + partie.getScore() + "\n");
-
     }
+
 
     public static Couleurs[] getInput()
     {
