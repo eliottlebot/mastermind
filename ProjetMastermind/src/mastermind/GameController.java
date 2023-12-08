@@ -2,31 +2,29 @@ package mastermind;
 
 import java.util.Scanner;
 public class GameController {
-    public GameController()
-    {
+    private Plateau plateau;
+    private Partie partie;
+    private int nbManches;
+    private int nbPionsDispo;
+    private int nbPionsCombinaison;
+    private int nbTentatives;
 
+
+    public GameController(Plateau plateau)
+    {
+        this.plateau = plateau;
+    }
+
+    public void createPartie(int nbManches, int nbPionsDispo, int nbPionsCombinaison, int nbTentatives)
+    {
+        partie = plateau.createPartie(nbManches, nbPionsDispo, nbPionsCombinaison, nbTentatives);
+        gameStart();
     }
 
 
     public void gameStart()
     {
         Scanner scanner = new Scanner(System.in);
-
-        System.out.println("Nombre de manches : ");
-        int nbManches = Integer.parseInt(scanner.nextLine());
-
-        System.out.println("Nombre de pions disponibles : ");
-        int nbPionsDispo = Integer.parseInt(scanner.nextLine());
-
-        System.out.println("Nombre de pions combinaisons : ");
-        int nbPionsCombinaison = Integer.parseInt(scanner.nextLine());
-
-        System.out.println("Nombre de tentatives : ");
-        int nbTentatives = Integer.parseInt(scanner.nextLine());
-
-
-
-        System.out.println("------MASTERMIND------\n");
 
 
         //Ca c'est juste pour afficher les couleurs disponibles
@@ -38,9 +36,6 @@ public class GameController {
         System.out.println(Couleurs.values()[nbPionsDispo-1]);
 
 
-
-        //création de la partie avec les bons paramètres
-        Partie partie = new Partie(nbManches, nbPionsDispo, nbPionsCombinaison, nbTentatives);
         for(int i = 0; i < nbManches; i++)
         {
             //création de la manche
@@ -71,6 +66,8 @@ public class GameController {
         }
         System.out.println("--- Partie terminée avec comme score : " + partie.getScore() + "\n");
     }
+
+
 
 
     public static Couleurs[] getInput()
