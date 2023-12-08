@@ -5,19 +5,20 @@ skinparam classFontStyle Bold
 skinparam style strictuml
 hide empty members
 
+class Main{
+    +main(args : String){static}
+}
 
 package models
 {
     class Plateau
     {
+        -nomJoueur : String
+        -meilleurScore : Integer
         +createPartie() : Partie
         +createJoueur(nom : String) : Joueur
     }
 
-    class Joueur
-    {
-        -nom : String
-    }
 
     class Partie
     {
@@ -31,12 +32,13 @@ package models
         +createManche(tailleCombinaison : Integer, nbTentatives: Integer): Manche
         +upgradeScore()
         +getScore()
-        +setAffichage()
+        +setAffichage(mode : IndiceStrategy)
     }
 
 
     class Manche
     {
+        -score :  Integer
         -nbTentatives : Integer
         -tailleCombinaison : Integer
         -finished : Boolean
@@ -45,7 +47,6 @@ package models
         +skipManche()
         +createTentative(i : Integer) : Tentative
         +getCombinaisonSecrete() : Combinaison
-        +verifierCombinaisonJoueurInt(tentative : Tentative)
         +verifierCombinaisonIndices(tentative : Tentative)
         +upgradeScore()
         +getScore()
@@ -53,7 +54,6 @@ package models
 
     class Tentative
     {
-        - pionsBienPlaces : Integer
         +<<create>>Tentative(tailleCombinaison : Integer)
         +validerCombinaison()
         +augmentePionsBienPlace()
@@ -64,13 +64,11 @@ package models
     }
 
     class Combinaison{
-        +genererCombinaisonSecrete()
+        -taille : Integer
+        +<<create>>Combinaison(taille : Integer)
+        +genererCombinaisonSecrete(pionsDispo : Integer)
         +couleurDansCombinaison(couleur : CouleurPion) : Boolean
         +reset()
-    }
-
-    class Indice{
-
     }
 
 
@@ -80,6 +78,11 @@ package models
         +...()
     }
 
+    class IndiceStrategyFactory{
+        +createNumeric() : IndiceStrategy
+        +createEasy() : IndiceStrategy
+        +createClassic() : IndiceStrategy
+    }
 
     interface IndiceStrategy <<interface>>
     {
@@ -111,13 +114,12 @@ package models
         +ORANGE
         +NOIR
         +BLANC
-        +RIEN
     }
 
-    enum IndiceCouleur <<enumeration>>{
-        +NOIR
-        +BLANC
-        +RIEN
+    enum Indice <<enumeration>>{
+        +BIENPLACE
+        +MALPLACE
+        +VIDE
     }
 
 }
@@ -128,6 +130,7 @@ package views
 {
     class ViewStart implements PartieObserver
     {
+        +createPartie(nomJoueur : String, nbManches : Integer, nbPionsDispo : Integer, tailleCombinaison : Integer, nbTentatives : Integer)
     }
 
 
@@ -136,11 +139,16 @@ package views
         +changeAffichageClassique()
         +changeAffichageFacile()
         +changeAffichageNumerique()
+        +placerPionCombinaison(index : Integer, couleur : CouleurPion)
+        +validerCombinaison()
+        +skipManche()
+        +resetCombinaison()
     }
 
 
     class ViewEnd implements PartieObserver
     {
+        +restart()
     }
 }
 
@@ -149,7 +157,8 @@ package controller
 {
     class GameController
     {
-        +choixCouleurCombinaison()
+        +createPartie(nomJoueur : String, nbManches : Integer, nbPionsDispo : Integer, tailleCombinaison : Integer, nbTentatives : Integer)
+        +placerPionCombinaison(index : Integer, couleur : CouleurPion)
         +validerCombinaison()
         +resetCombinaison()
         +skipManche()
@@ -162,18 +171,17 @@ package controller
 
 
 Plateau "1" *--> "1 -partie" Partie : Crée >
-Plateau *-left-> "1 -joueur" Joueur : Crée >
 Partie *---> "*\n -manche" Manche : Crée >
 
 Partie "*" o--> "*\n-listeObservers" PartieObserver: observe <
+Partie " 1 " o-left-> "1\n -strategy" IndiceStrategy : selectionne >
 Manche "*" o--> "*\n-listeObservers" PartieObserver: observe <
 Manche *--> Tentative : Crée
-Manche " 1 " o-left-> "1\n -strategy" IndiceStrategy : selectionne >
 Manche *--->"1 \n-combinaisonSecrète" Combinaison : Possède >
 
 
 Tentative *--->"1 \n-combinaisonJoueur" Combinaison : Possède >
-Tentative *--->"1 \n-indices" Indice : Possède >
+Tentative *--->"4..6 \n-indices" Indice : Possède >
 
 Combinaison o--> "4..6\n-couleurs"CouleurPion
 
@@ -184,5 +192,20 @@ ViewStart o-up-> "1\n -controller" GameController
 
 GameController o-left-> "1\n manipule" Partie
 GameController o-left-> "1\n manipule" Plateau
+GameController o-left-> "1\n manipule" Manche
+GameController o-left-> "1\n manipule" Tentative
+GameController *->"1 \n -_stratFactory" IndiceStrategyFactory
+
+IndiceStrategyFactory ..> IndiceStrategy : <<use>>
+IndiceStrategyFactory ..> IndiceNum : <<use>>
+IndiceStrategyFactory ..> IndiceEasy : <<use>>
+IndiceStrategyFactory ..> IndiceClassic : <<use>>
+
+Main ..> Plateau : <<use>>
+Main ..> GameController : <<use>>
+Main ..> ViewGame : <<use>>
+Main ..> ViewStart : <<use>>
+Main ..> ViewEnd : <<use>>
+
 
 @enduml
