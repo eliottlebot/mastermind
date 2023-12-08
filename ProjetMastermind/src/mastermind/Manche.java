@@ -10,6 +10,7 @@ public class Manche {
     private Tentative tentativeActuelle;
     private boolean isFinished = false;
     private int score = 0;
+    private List<MastermindObserver> listObservers = new ArrayList<>();
 
 
     public Manche(Integer tailleCombinaison, Integer nombreTentatives){
@@ -130,4 +131,10 @@ public class Manche {
     {
         return this.score;
     }
+
+    public void addObserver(MastermindObserver mastermindObserver)
+    {
+        listObservers.add(mastermindObserver);
+    }
+
 }
