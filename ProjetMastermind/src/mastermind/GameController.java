@@ -1,5 +1,6 @@
 package mastermind;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 public class GameController {
     private Plateau plateau;
@@ -8,6 +9,14 @@ public class GameController {
     private int nbPionsDispo;
     private int nbPionsCombinaison;
     private int nbTentatives;
+
+
+    private Manche mancheActuelle;
+    private Tentative tentativeActuelle;
+    private boolean tentativeValidee = false;
+
+    private int manchesCount = 0;
+    private int tentativesCount = 0;
 
 
     public GameController(Plateau plateau)
@@ -21,33 +30,38 @@ public class GameController {
         this.nbPionsCombinaison = nbPionsCombinaison;
         this.nbTentatives = nbTentatives;
         partie = plateau.createPartie(nbManches, nbPionsDispo, nbPionsCombinaison, nbTentatives);
-        //gameStart();
+        gameStart();
     }
 
 
     public void gameStart()
     {
-        for(int i = 0; i < nbManches; i++)
+        if(manchesCount < nbManches)
+        {
+            manchesCount++;
+            mancheActuelle = partie.createManche();
+            tentativeActuelle = mancheActuelle.createTentative(nbPionsCombinaison);
+        }
+        /*for(int i = 0; i < nbManches; i++)
         {
             //création de la manche
-            Manche manche = partie.createManche(i);
             System.out.println("\n\t--- mastermind.Manche n°" + i + " ---\n");
-            for(int j = 0; j < nbTentatives && !manche.isFinished(); j++)
+            for(int j = 0; j < nbTentatives && !mancheActuelle.isFinished(); j++)
             {
                 //augmenter le score
-                manche.upgradeScore();
+                mancheActuelle.upgradeScore();
                 System.out.println("\t\t--- Quelle est votre tentative (couleur couleur couleur...) : " + j);
 
                 //créer la tentative
-                Tentative tenta = manche.createTentative(nbPionsCombinaison);
 
-                //récupérer les couleurs du joueur et mise en place de la tentative
-                Couleurs[] tableauCouleurs = getInput();
-                tenta.setTentative(tableauCouleurs);
+                while(!tentativeValidee)
+                {
+
+                }
 
                 //verif de la tentative et récupérer l'indice
-                manche.verifierCombinaisonIndices();
-                Indice indice[] = tenta.getIndices();
+                mancheActuelle.verifierCombinaisonIndices();
+                Indice indice[] = tentativeActuelle.getIndices();
 
                 //afficher l'indice (jpense t'avais capté sans le commentaire)
                 afficherTableauIndices(indice);
@@ -55,7 +69,23 @@ public class GameController {
             System.out.println("\t---- mastermind.Manche terminée avec comme score : " + manche.getScore() + "----\n\n");
             partie.upgradeScore(manche.getScore());
         }
-        System.out.println("--- Partie terminée avec comme score : " + partie.getScore() + "\n");
+        System.out.println("--- Partie terminée avec comme score : " + partie.getScore() + "\n");*/
+    }
+
+    public void validerTentative(Couleurs[] tentative)
+    {
+        tentativeActuelle.setTentative(tentative);
+        nbTentatives++;
+        mancheActuelle.verifierCombinaisonIndices();
+
+        if(mancheActuelle.isFinished())
+        {
+            System.out.println("trouvééééééééééééééééé");
+        }
+        else
+        {
+            Indice indice[] = tentativeActuelle.getIndices();
+        }
     }
 
 

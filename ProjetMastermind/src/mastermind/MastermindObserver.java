@@ -1,8 +1,9 @@
 package mastermind;
 
 public interface MastermindObserver{
-    public String name="zebi";
+    public void init(int nbTentatives, int nbPionsCombinaison);
     public void showAvaibleColors(Couleurs[] couleursDispo);
+    public void startTentative(int nbPionsCombi);
 
     /*public void indiceUpdate(Indice[] indices);
     public void tentativeUpdate(Tentative tentative);

@@ -30,7 +30,7 @@ public class ViewStart extends JFrame{
         lblNbPionsDispo.setText("Nombre de pions disponibles : ");
 
         JLabel lblNbPionsCombinaison = new JLabel();
-        lblNbPionsCombinaison.setText("Nombre de combinaisons : ");
+        lblNbPionsCombinaison.setText("Nombre de pions dans les combinaisons : ");
 
         JLabel lblNbTentatives = new JLabel();
         lblNbTentatives.setText("Nombre de tentatives : ");
