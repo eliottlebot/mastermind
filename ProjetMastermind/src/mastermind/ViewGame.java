@@ -5,6 +5,8 @@ import java.awt.*;
 
 public class ViewGame extends JFrame implements MastermindObserver {
     GameController controller;
+    JPanel mainPanel = new JPanel();
+    JPanel avaibleColors = new JPanel();
 
     public ViewGame(GameController controller)
     {
@@ -12,21 +14,29 @@ public class ViewGame extends JFrame implements MastermindObserver {
         this.controller = controller;
         setSize(400, 800);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setVisible(true);
         setLayout(new GridLayout(5, 2));
+        System.out.println("view game créé");
+
+        mainPanel.setLayout(new BorderLayout());
+
+        mainPanel.add(avaibleColors, BorderLayout.CENTER);
+        setContentPane(mainPanel);
+        setVisible(true);
     }
+
+
 
     public void showAvaibleColors(Couleurs[] couleursDispo)
     {
-        JPanel avaibleColors = new JPanel();
+        System.out.println("affaichage couleurs dispo");
         avaibleColors.setLayout(new GridLayout(1, couleursDispo.length));
-        for(int i = 0; i < couleursDispo.length; i++)
-        {
-            /*ImageIcon imageIcon = new ImageIcon("assets/pions/" + couleursDispo[i] + ".png");
-            JLabel j = new JLabel(imageIcon);*/
-            JLabel j = new JLabel(couleursDispo[i].toString());
+
+        for (Couleurs couleurs : couleursDispo) {
+            ImageIcon imageIcon = new ImageIcon("a31-mastermind/ProjetMastermind/assets/pions/" + couleurs + ".png");
+            JLabel j = new JLabel(imageIcon);
+            j.setPreferredSize(new Dimension(64,64));
+            System.out.println(couleurs.toString());
             avaibleColors.add(j);
         }
-        add(avaibleColors);
     }
 }

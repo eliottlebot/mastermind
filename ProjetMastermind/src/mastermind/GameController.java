@@ -21,7 +21,7 @@ public class GameController {
         this.nbPionsCombinaison = nbPionsCombinaison;
         this.nbTentatives = nbTentatives;
         partie = plateau.createPartie(nbManches, nbPionsDispo, nbPionsCombinaison, nbTentatives);
-        gameStart();
+        //gameStart();
     }
 
 

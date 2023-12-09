@@ -6,5 +6,6 @@ public class Main {
         GameController controller = new GameController(plateau);
         ViewStart vueStart = new ViewStart(controller);
         ViewGame viewGame = new ViewGame(controller);
+        plateau.addObserver(viewGame);
     }
 }

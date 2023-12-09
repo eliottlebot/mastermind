@@ -15,11 +15,12 @@ public class Partie {
     public Partie(List<MastermindObserver> observers, int nbManches, int nbPionsDispo, int nbPionsCombinaison, int nbTentatives)
     {
         listObservers = observers;
-        notifyObserversShowAvaibleColors();
         this.nbManches = nbManches;
         this.nbPionsDispo = nbPionsDispo;
         this.nbPionsCombinaison = nbPionsCombinaison;
         this.nbTentatives = nbTentatives;
+        notifyObserversShowAvaibleColors();
+        System.out.print("partie crééé dans la classe partie");
     }
 
     public Manche createManche(int i)
