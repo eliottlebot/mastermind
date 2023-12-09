@@ -7,16 +7,19 @@ public class Manche {
     private Couleurs[] combinaisonSecrete;
     private int nbTentativesMax;
     private int tailleCombinaison;
+    private int nbPionsDispo;
     private Tentative tentativeActuelle;
     private boolean isFinished = false;
     private int score = 0;
-    private List<MastermindObserver> listObservers = new ArrayList<>();
+    private List<MastermindObserver> listObservers;
 
 
-    public Manche(Integer tailleCombinaison, Integer nombreTentatives){
+    public Manche(int nbPionsDispo, Integer tailleCombinaison, Integer nombreTentatives, List<MastermindObserver> obervers){
+        this.nbPionsDispo = nbPionsDispo;
         this.tailleCombinaison = tailleCombinaison;
         combinaisonSecrete = new Couleurs[tailleCombinaison];
         nbTentativesMax = nombreTentatives;
+        listObservers = obervers;
     }
 
     public Tentative createTentative(int i)
@@ -132,9 +135,9 @@ public class Manche {
         return this.score;
     }
 
-    public void addObserver(MastermindObserver mastermindObserver)
-    {
-        listObservers.add(mastermindObserver);
-    }
+
+
+
+
 
 }

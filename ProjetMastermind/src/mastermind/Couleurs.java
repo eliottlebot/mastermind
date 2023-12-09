@@ -5,7 +5,7 @@ public enum Couleurs {
     ROUGE,
     VERT,
     VIOLET,
-    MAJENTA,
+    JAUNE,
     NOIR,
     BLANC
 }

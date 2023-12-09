@@ -1,17 +1,17 @@
 package mastermind;
 import javax.swing.*;
 import java.awt.*;
-public class PartieVue extends JFrame implements MastermindObserver{
-    private JTextField tentativeActuelle;
+public class ViewStart extends JFrame{
     GameController controller;
 
 
-    public PartieVue(GameController controller)
+    public ViewStart(GameController controller)
     {
         super("Mastermind");
         this.controller = controller;
         setSize(400, 800);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
+
 
         setParameters();
         setVisible(true);
@@ -66,6 +66,7 @@ public class PartieVue extends JFrame implements MastermindObserver{
             int nbTenta = Integer.parseInt(txtNbTentatives.getText());
 
             try {
+                this.dispose();
                 controller.createPartie(nbManches, nbPionsDispo, nbPionsCombi, nbTenta);
             } catch (Exception e) {
             }
@@ -73,19 +74,5 @@ public class PartieVue extends JFrame implements MastermindObserver{
         });
         parametre.add(validerButton);
         this.add(parametre);
-
-        //parametre.
-    }
-    public void indiceUpdate(Indice[] indices)
-    {
-
-    }
-    public void tentativeUpdate(Tentative tentative)
-    {
-
-    }
-    public void scoreUpdate(int score)
-    {
-
     }
 }

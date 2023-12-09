@@ -1,4 +1,6 @@
 package mastermind;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 public class Partie {
     private int nbManches;
@@ -7,10 +9,13 @@ public class Partie {
     private int nbTentatives;
     private int score = 0;
     private Manche mancheActuelle;
+    private List<MastermindObserver> listObservers;
 
 
-    public Partie(int nbManches, int nbPionsDispo, int nbPionsCombinaison, int nbTentatives)
+    public Partie(List<MastermindObserver> observers, int nbManches, int nbPionsDispo, int nbPionsCombinaison, int nbTentatives)
     {
+        listObservers = observers;
+        notifyObserversShowAvaibleColors();
         this.nbManches = nbManches;
         this.nbPionsDispo = nbPionsDispo;
         this.nbPionsCombinaison = nbPionsCombinaison;
@@ -19,7 +24,7 @@ public class Partie {
 
     public Manche createManche(int i)
     {
-        Manche manche = new Manche(nbPionsCombinaison, nbTentatives);
+        Manche manche = new Manche(nbPionsDispo, nbPionsCombinaison, nbTentatives, listObservers);
         mancheActuelle = manche;
         manche.genererCombinaisonAleatoire();
         return manche;
@@ -35,4 +40,17 @@ public class Partie {
         return this.score;
     }
 
+    private void notifyObserversShowAvaibleColors()
+    {
+        Couleurs[] couleursDispo = new Couleurs[nbPionsDispo];
+        Couleurs[] toutesLesCouleurs = Couleurs.values();
+
+        for (int i = 0; i < nbPionsDispo; i++) {
+            couleursDispo[i] = toutesLesCouleurs[i];
+        }
+
+        for (MastermindObserver observer: listObservers) {
+            observer.showAvaibleColors(couleursDispo);
+        }
+    }
 }
