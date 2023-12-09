@@ -16,8 +16,7 @@ public class Plateau {
 
     public Partie createPartie(int nbManches, int nbPionsDispo, int nbPionsCombinaison, int nbTentatives)
     {
-        Partie partie = new Partie(listObservers, nbManches, nbPionsDispo, nbPionsCombinaison, nbTentatives);
-        return partie;
+        return new Partie(listObservers, nbManches, nbPionsDispo, nbPionsCombinaison, nbTentatives);
     }
 
 
