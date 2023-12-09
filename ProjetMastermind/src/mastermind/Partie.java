@@ -20,10 +20,9 @@ public class Partie {
         this.nbPionsCombinaison = nbPionsCombinaison;
         this.nbTentatives = nbTentatives;
         notifyObserversShowAvaibleColors();
-        System.out.print("partie crééé dans la classe partie");
     }
 
-    public Manche createManche(int i)
+    public Manche createManche()
     {
         Manche manche = new Manche(nbPionsDispo, nbPionsCombinaison, nbTentatives, listObservers);
         mancheActuelle = manche;
