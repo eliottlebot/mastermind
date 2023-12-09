@@ -17,6 +17,9 @@ public class GameController {
 
     public void createPartie(int nbManches, int nbPionsDispo, int nbPionsCombinaison, int nbTentatives)
     {
+        this.nbManches = nbManches;
+        this.nbPionsCombinaison = nbPionsCombinaison;
+        this.nbTentatives = nbTentatives;
         partie = plateau.createPartie(nbManches, nbPionsDispo, nbPionsCombinaison, nbTentatives);
         gameStart();
     }
@@ -24,18 +27,6 @@ public class GameController {
 
     public void gameStart()
     {
-        Scanner scanner = new Scanner(System.in);
-
-
-        //Ca c'est juste pour afficher les couleurs disponibles
-        System.out.print("Couleurs disponibles : ");
-        for(int i = 0; i<nbPionsDispo-1; i++)
-        {
-            System.out.print(Couleurs.values()[i] + ", ");
-        }
-        System.out.println(Couleurs.values()[nbPionsDispo-1]);
-
-
         for(int i = 0; i < nbManches; i++)
         {
             //création de la manche
@@ -48,7 +39,7 @@ public class GameController {
                 System.out.println("\t\t--- Quelle est votre tentative (couleur couleur couleur...) : " + j);
 
                 //créer la tentative
-                Tentative tenta = manche.createTentative(j);
+                Tentative tenta = manche.createTentative(nbPionsCombinaison);
 
                 //récupérer les couleurs du joueur et mise en place de la tentative
                 Couleurs[] tableauCouleurs = getInput();
