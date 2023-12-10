@@ -1,29 +1,22 @@
 package mastermind;
 public class Tentative {
-    private Couleurs[] tentative;
+    private Couleurs[] combinaisonCouleur;
     public Indice[] indices;
-    public int pionsBienPlaces;
 
 
     public Tentative(int tailleCombinaison) {
-        tentative = new Couleurs[tailleCombinaison];
+        combinaisonCouleur = new Couleurs[tailleCombinaison];
         indices = new Indice[tailleCombinaison];
-        pionsBienPlaces=0;
     }
 
-    public Tentative()
+    public void setCombinaisonCouleur(Couleurs[] combinaisonCouleur)
     {
-
+        this.combinaisonCouleur = combinaisonCouleur;
     }
 
-    public void setTentative(Couleurs[] tentative)
+    public Couleurs[] getCombinaison()
     {
-        this.tentative = tentative;
-    }
-
-    public Couleurs[] getTentative()
-    {
-        return this.tentative;
+        return this.combinaisonCouleur;
     }
 
     public Indice[] getIndices()
@@ -31,11 +24,6 @@ public class Tentative {
         return this.indices;
     }
 
-
-
-    public void augmentePionsBienPlace(){
-        this.pionsBienPlaces++;
-    }
     public void setIndicesCouleurs(Indice indice, Integer index){
         this.indices[index]=indice;
     }

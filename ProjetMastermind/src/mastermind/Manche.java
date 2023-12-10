@@ -1,6 +1,5 @@
 package mastermind;
 
-import java.lang.reflect.Array;
 import java.util.*;
 
 public class Manche {
@@ -22,12 +21,11 @@ public class Manche {
         listObservers = obervers;
     }
 
-    public Tentative createTentative(int i)
+    public Tentative createTentative()
     {
-        notifyObserversStartTentative(tailleCombinaison);
         Tentative tenta = new Tentative(tailleCombinaison);
         this.tentativeActuelle = tenta;
-        notifyObserversUpdateIndice(tentativeActuelle.getIndices());
+        notifyObserversStartTentative(tailleCombinaison);
         return tenta;
     }
 
@@ -71,22 +69,6 @@ public class Manche {
     //----------------------------------------------
     //Fonctions de vérification (calcul)
     //----------------------------------------------
-    public void verifierCombinaisonJoueurInt()
-    {
-        boolean finished = true;
-        for(int i = 0; i<combinaisonSecrete.length; i++)
-        {
-            if(combinaisonSecrete[i]==tentativeActuelle.getTentative()[i])
-            {
-                tentativeActuelle.augmentePionsBienPlace();
-            }
-            else{
-                finished = false;
-            }
-        }
-
-        this.isFinished = finished;
-    }
     public void verifierCombinaisonIndices(){
         //On parcourt la combinaison secrète en vérifiant deux choses :
         //Si la couleur est la bonne, on donne la couleur Noir au bon index
@@ -95,11 +77,11 @@ public class Manche {
         boolean finished = true;
         for(int i = 0; i<combinaisonSecrete.length; i++)
         {
-            if(combinaisonSecrete[i]==tentativeActuelle.getTentative()[i])
+            if(combinaisonSecrete[i]==tentativeActuelle.getCombinaison()[i])
             {
                 tentativeActuelle.setIndicesCouleurs(Indice.NOIR, i);
             }
-            else if(couleurDansCombinaison(combinaisonSecrete, tentativeActuelle.getTentative()[i]))
+            else if(couleurDansCombinaison(combinaisonSecrete, tentativeActuelle.getCombinaison()[i]))
             {
                 tentativeActuelle.setIndicesCouleurs(Indice.BLANC, i);
                 finished = false;
@@ -111,6 +93,7 @@ public class Manche {
             }
         }
 
+        System.out.println("fonction terminée ");
         this.isFinished = finished;
     }
     public Boolean couleurDansCombinaison(Couleurs[] combinaisonSecrete, Couleurs couleur){

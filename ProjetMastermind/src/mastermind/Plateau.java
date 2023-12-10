@@ -8,11 +8,6 @@ public class Plateau {
     private int meilleurScore;
     private List<MastermindObserver> listObservers = new ArrayList<>();
 
-    public Plateau()
-    {
-
-    }
-
 
     public Partie createPartie(int nbManches, int nbPionsDispo, int nbPionsCombinaison, int nbTentatives)
     {
@@ -20,11 +15,6 @@ public class Plateau {
         return new Partie(listObservers, nbManches, nbPionsDispo, nbPionsCombinaison, nbTentatives);
     }
 
-
-    public void createJoueur(String nom)
-    {
-
-    }
 
     public void addObserver(MastermindObserver mastermindObserver)
     {
