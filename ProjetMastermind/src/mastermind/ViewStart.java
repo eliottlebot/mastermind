@@ -36,13 +36,13 @@ public class ViewStart extends JFrame{
         lblNbTentatives.setText("Nombre de tentatives : ");
 
 
-        JTextField txtNbManches = new JTextField();
+        JTextField txtNbManches = new JTextField("3");
 
-        JTextField txtNbPionsDispo = new JTextField();
+        JTextField txtNbPionsDispo = new JTextField("8");
 
-        JTextField txtNbPionsCombinaison = new JTextField();
+        JTextField txtNbPionsCombinaison = new JTextField("4");
 
-        JTextField txtNbTentatives = new JTextField();
+        JTextField txtNbTentatives = new JTextField("10");
 
 
         parametre.add(lblNbManches);
