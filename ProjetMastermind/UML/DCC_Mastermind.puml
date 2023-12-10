@@ -5,26 +5,50 @@ skinparam classAttributeIconSize 0
 skinparam classFontStyle Bold
 hide empty members
 
+Class mastermind.Combinaison{
++ <<create>> Combinaison()
+
+}
+
+
+
 Enum mastermind.Couleurs<<enum>> {
 BLEU
 ORANGE
 ROUGE
 VERT
 VIOLET
-MAJENTA
+JAUNE
 NOIR
 BLANC
 
 }
 Class mastermind.GameController{
-+ <<create>> GameController()
++ <<create>> GameController(plateau: Plateau)
+
+
+- nbManches: Integer
+- nbPionsDispo: Integer
+- nbPionsCombinaison: Integer
+- nbTentatives: Integer
+
+
+- tentativeValidee: Boolean
+- manchesCount: Integer
+- tentativesCount: Integer
++ createPartie(nbManches: Integer, nbPionsDispo: Integer, nbPionsCombinaison: Integer, nbTentatives: Integer)
 + gameStart()
++ validerTentative(tentative: void)
 {static} + getInput(): void
 {static} + afficherTableauIndices(tableau: void)
 {static} + afficherIndicesInt(tentative: Tentative)
 
 }
 
+mastermind.GameController o-- "plateau"mastermind.Plateau
+mastermind.GameController o-- "partie"mastermind.Partie
+mastermind.GameController o-- "mancheActuelle"mastermind.Manche
+mastermind.GameController o-- "tentativeActuelle"mastermind.Tentative
 mastermind.GameController --> mastermind.Tentative: afficherIndicesInt
 
 
@@ -43,13 +67,15 @@ Class mastermind.Main{
 
 
 Class mastermind.Manche{
-+ <<create>> Manche(tailleCombinaison: Integer, nombreTentatives: Integer)
++ <<create>> Manche(nbPionsDispo: Integer, tailleCombinaison: Integer, nombreTentatives: Integer, obervers: MastermindObserver[*])
 - combinaisonSecrete: void
 - nbTentativesMax: Integer
 - tailleCombinaison: Integer
+- nbPionsDispo: Integer
 
 - isFinished: Boolean
 - score: Integer
+
 + createTentative(i: Integer): Tentative
 + getTentativeActuelle(): Tentative
 + getCombinaisonSecrete(): void
@@ -60,28 +86,58 @@ Class mastermind.Manche{
 + isFinished(): Boolean
 + upgradeScore()
 + getScore(): Integer
+- notifyObserversStartTentative(nbPionsCombi: Integer)
+- notifyObserversUpdateIndice(indice: void)
 
 }
 
 mastermind.Manche o-- "tentativeActuelle"mastermind.Tentative
+mastermind.Manche o--- "listObservers"mastermind.MastermindObserver
 mastermind.Manche --> mastermind.Couleurs: couleurDansCombinaison
 
 
+Interface mastermind.MastermindObserver<<interface>> {
+{abstract} + init(nbTentatives: Integer, nbPionsCombinaison: Integer)
+{abstract} + showAvaibleColors(couleursDispo: void)
+{abstract} + startTentative(nbPionsCombi: Integer)
+{abstract} + updateIndice(indices: void)
+
+}
+
 Class mastermind.Partie{
-+ <<create>> Partie(nbManches: Integer, nbPionsDispo: Integer, nbPionsCombinaison: Integer, nbTentatives: Integer)
++ <<create>> Partie(observers: MastermindObserver[*], nbManches: Integer, nbPionsDispo: Integer, nbPionsCombinaison: Integer, nbTentatives: Integer)
 - nbManches: Integer
 - nbPionsDispo: Integer
 - nbPionsCombinaison: Integer
 - nbTentatives: Integer
 - score: Integer
 
-+ createManche(i: Integer): Manche
+
++ createManche(): Manche
 + upgradeScore(nb: Integer)
 + getScore(): Integer
+- notifyObserversShowAvaibleColors()
 
 }
 
 mastermind.Partie o-- "mancheActuelle"mastermind.Manche
+mastermind.Partie o--- "listObservers"mastermind.MastermindObserver
+
+
+Class mastermind.Plateau{
++ <<create>> Plateau()
+
+- meilleurScore: Integer
+
++ createPartie(nbManches: Integer, nbPionsDispo: Integer, nbPionsCombinaison: Integer, nbTentatives: Integer): Partie
++ createJoueur(nom: String)
++ addObserver(mastermindObserver: MastermindObserver)
+- notifyObserversInit(nbTentatives: Integer, nbPionsCombi: Integer)
+
+}
+
+mastermind.Plateau o--- "listObservers"mastermind.MastermindObserver
+mastermind.Plateau --> mastermind.MastermindObserver: addObserver
 
 
 Class mastermind.Tentative{
@@ -99,6 +155,38 @@ Class mastermind.Tentative{
 }
 
 mastermind.Tentative --> mastermind.Indice: setIndicesCouleurs
+
+
+Class mastermind.ViewGame{
++ <<create>> ViewGame(controller: GameController)
+
+
+
+
+
+
+- isDragging: Boolean
+- pions: void
+- emptyCells: void
++ init(nbTentatives: Integer, nbPionsCombinaison: Integer)
++ showAvaibleColors(couleursDispo: void)
++ startTentative(nbPionsCombi: Integer)
++ updateIndice(indices: void)
+
+}
+mastermind.ViewGame ..|> mastermind.MastermindObserver
+
+mastermind.ViewGame o-- "controller"mastermind.GameController
+
+
+Class mastermind.ViewStart{
++ <<create>> ViewStart(controller: GameController)
+
++ setParameters()
+
+}
+
+mastermind.ViewStart o-- "controller"mastermind.GameController
 
 
 
