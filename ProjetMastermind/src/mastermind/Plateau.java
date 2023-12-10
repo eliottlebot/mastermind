@@ -15,6 +15,11 @@ public class Plateau {
         return new Partie(listObservers, nbManches, nbPionsDispo, nbPionsCombinaison, nbTentatives);
     }
 
+    public void setJoueur(String nom)
+    {
+        nomJoueur = nom;
+    }
+
 
     public void addObserver(MastermindObserver mastermindObserver)
     {
