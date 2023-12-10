@@ -1,18 +1,15 @@
 package mastermind;
 
-import java.util.ArrayList;
 import java.util.Scanner;
 public class GameController {
     private Plateau plateau;
     private Partie partie;
+    private Manche mancheActuelle;
+    private Tentative tentativeActuelle;
     private int nbManches;
     private int nbPionsDispo;
     private int nbPionsCombinaison;
     private int nbTentatives;
-
-
-    private Manche mancheActuelle;
-    private Tentative tentativeActuelle;
     private boolean tentativeValidee = false;
 
     private int manchesCount = 0;
@@ -40,7 +37,7 @@ public class GameController {
         {
             manchesCount++;
             mancheActuelle = partie.createManche();
-            tentativeActuelle = mancheActuelle.createTentative(nbPionsCombinaison);
+            tentativeActuelle = mancheActuelle.createTentative();
         }
         /*for(int i = 0; i < nbManches; i++)
         {
@@ -74,46 +71,28 @@ public class GameController {
 
     public void validerTentative(Couleurs[] tentative)
     {
-        tentativeActuelle.setTentative(tentative);
-        nbTentatives++;
+        tentativeActuelle.setCombinaisonCouleur(tentative);
+        tentativesCount++;
         mancheActuelle.verifierCombinaisonIndices();
 
-        if(mancheActuelle.isFinished())
+        if(mancheActuelle.isFinished() || tentativesCount > nbTentatives)
         {
-            System.out.println("trouvééééééééééééééééé");
+            System.out.println("manche terminée");
         }
         else
         {
             Indice indice[] = tentativeActuelle.getIndices();
         }
+        System.out.println("Tentative N°" + tentativesCount + " sur "+nbTentatives);
     }
 
+    public void setAffichageIndiceFacile(){
 
-
-
-    public static Couleurs[] getInput()
-    {
-        Scanner scanner = new Scanner(System.in);
-        String input = scanner.nextLine();
-        String[] couleursSaisies = input.split(" ");
-        Couleurs[] tableauCouleurs = new Couleurs[couleursSaisies.length];
-        for (int k = 0; k < couleursSaisies.length; k++)
-        {
-            tableauCouleurs[k] = Couleurs.valueOf(couleursSaisies[k].toUpperCase());
-        }
-
-        return tableauCouleurs;
     }
+    public void setAffichageIndiceClassique(){
 
-    public static void afficherTableauIndices(Indice[] tableau) {
-        for (Indice indice : tableau) {
-            System.out.print(indice + " ");
-        }
-        System.out.println();
     }
+    public void setAffichageIndiceNumeric(){
 
-    public static void afficherIndicesInt(Tentative tentative){
-        System.out.println(tentative.pionsBienPlaces+ " : pions biens placés");
-        System.out.println(tentative.indices.length-(tentative.pionsBienPlaces)+ " : pions mal placés");
     }
 }

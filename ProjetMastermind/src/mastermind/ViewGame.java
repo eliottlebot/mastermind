@@ -26,13 +26,13 @@ public class ViewGame extends JFrame implements MastermindObserver {
         this.controller = controller;
         setSize(400, 800);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setLayout(new GridLayout(5, 2));
+        this.setLayout(new BorderLayout());
+        mainPanel.setLayout(new GridLayout(8,1));
 
 
-
-        add(mainPanel);//affichage des tentatives passées + indices
-        add(tentativePanel);//tentative actuelle
-        add(avaibleColors);//couleurs dispos
+        this.add(mainPanel, BorderLayout.PAGE_START);//affichage des tentatives passées + indices
+        add(tentativePanel, BorderLayout.CENTER);//tentative actuelle
+        add(avaibleColors, BorderLayout.PAGE_END);//couleurs dispos
         setVisible(true);
     }
 
@@ -95,11 +95,13 @@ public class ViewGame extends JFrame implements MastermindObserver {
             }
             mainPanel.add(archiveTentative);
 
+            //Le bouton permet d'appeller la fonction de verification dans le game controller
             try {
                 controller.validerTentative(tentative);
-            } catch (Exception e) {
             }
-
+            catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
         });
         tentativePanel.add(validerButton);
     }

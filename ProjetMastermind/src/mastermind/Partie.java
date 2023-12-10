@@ -24,10 +24,9 @@ public class Partie {
 
     public Manche createManche()
     {
-        Manche manche = new Manche(nbPionsDispo, nbPionsCombinaison, nbTentatives, listObservers);
-        mancheActuelle = manche;
-        manche.genererCombinaisonAleatoire();
-        return manche;
+        mancheActuelle = new Manche(nbPionsDispo, nbPionsCombinaison, nbTentatives, listObservers);
+        mancheActuelle.genererCombinaisonAleatoire();
+        return mancheActuelle;
     }
 
     public void upgradeScore(int nb)
