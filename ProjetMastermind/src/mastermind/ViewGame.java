@@ -13,6 +13,7 @@ public class ViewGame extends JFrame implements MastermindObserver {
     JPanel tentativePanel = new JPanel();
     JPanel avaibleColors = new JPanel();
     private JLabel selectedPion;
+    private ImageIcon draggedIcon;
 
 
     private JLabel[] pions;
@@ -54,6 +55,7 @@ public class ViewGame extends JFrame implements MastermindObserver {
             pions[i].addMouseListener(new BallMouseListener());
             pions[i].setPreferredSize(new Dimension(64,64));
             pions[i].putClientProperty("couleur", couleursDispo[i]);
+            pions[i].addMouseMotionListener(new EmptyCellMouseMotionListener());
             avaibleColors.add(pions[i]);
         }
     }
@@ -75,7 +77,7 @@ public class ViewGame extends JFrame implements MastermindObserver {
             Couleurs[] tentative = new Couleurs[nbPionsCombi];
 
             JPanel archiveTentative = new JPanel();
-            archiveTentative.setLayout(new GridLayout(1, nbPionsCombi + 1));
+            archiveTentative.setLayout(new GridLayout(1, nbPionsCombi));
 
             int i = 0;
             for (JLabel j: emptyCells)
@@ -100,12 +102,34 @@ public class ViewGame extends JFrame implements MastermindObserver {
         tentativePanel.add(validerButton);
     }
 
+
+    public void updateIndice(Indice[] indices)
+    {
+        JPanel indicesPanel = new JPanel();
+        for(int i = 0; i < 4; i++)
+        {
+            JLabel j = new JLabel();
+            j.setOpaque(true);
+            switch (indices[i])
+            {
+                case NOIR -> j.setBackground(Color.BLACK);
+                case BLANC -> j.setBackground(Color.GRAY);
+                case VIDE -> j.setBackground(Color.WHITE);
+            }
+            indicesPanel.add(j);
+        }
+        mainPanel.add(indicesPanel);
+    }
+
     class BallMouseListener extends MouseAdapter {
         @Override
         public void mousePressed(MouseEvent e) {
             selectedPion = (JLabel) e.getSource();
             TransferHandler handler = selectedPion.getTransferHandler();
             handler.exportAsDrag(selectedPion, e, TransferHandler.COPY);
+
+            ImageIcon icon = (ImageIcon) selectedPion.getIcon();
+            draggedIcon = icon;
         }
     }
 
@@ -122,6 +146,18 @@ public class ViewGame extends JFrame implements MastermindObserver {
                 ImageIcon icon = (ImageIcon) selectedPion.getIcon();
                 emptyCell.setIcon(icon);
                 emptyCell.putClientProperty("couleur", selectedPion.getClientProperty("couleur"));
+                draggedIcon = null;
+            }
+        }
+    }
+
+    class EmptyCellMouseMotionListener extends MouseAdapter {
+        @Override
+        public void mouseDragged(MouseEvent e) {
+            System.out.println("mouse drag");
+            if (draggedIcon != null) {
+                setCursor(Toolkit.getDefaultToolkit().createCustomCursor(
+                        draggedIcon.getImage(), new Point(0, 0), "Custom Cursor"));
             }
         }
     }

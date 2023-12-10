@@ -27,6 +27,7 @@ public class Manche {
         notifyObserversStartTentative(tailleCombinaison);
         Tentative tenta = new Tentative(tailleCombinaison);
         this.tentativeActuelle = tenta;
+        notifyObserversUpdateIndice(tentativeActuelle.getIndices());
         return tenta;
     }
 
@@ -141,6 +142,14 @@ public class Manche {
     {
         for (MastermindObserver observer: listObservers) {
             observer.startTentative(nbPionsCombi);
+        }
+    }
+
+
+    private void notifyObserversUpdateIndice(Indice[] indice)
+    {
+        for (MastermindObserver observer: listObservers) {
+            observer.updateIndice(indice);
         }
     }
 
