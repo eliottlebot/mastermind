@@ -14,7 +14,6 @@ public class ViewGame extends JFrame implements MastermindObserver {
     JPanel avaibleColors = new JPanel();
     private JLabel selectedPion;
     private ImageIcon draggedIcon;
-    private boolean isDragging = false;
 
 
     private JLabel[] pions;
@@ -40,7 +39,6 @@ public class ViewGame extends JFrame implements MastermindObserver {
     {
         mainPanel.setLayout(new GridLayout(nbTentatives, 2));
         tentativePanel.setLayout(new GridLayout(1, nbPionsCombinaison + 1));
-        //pack();
     }
 
 
