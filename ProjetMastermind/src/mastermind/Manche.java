@@ -5,11 +5,10 @@ import java.util.*;
 public class Manche {
     private Combinaison combinaisonSecrete;
     private int nbTentativesMax;
-    private int tentativesCount = 0;
     private int tailleCombinaison;
     private int nbPionsDispo;
-    private Tentative tentativeActuelle;
-    private boolean isFinished = false;
+
+    private List<Tentative> listTentatives = new ArrayList<>();
     private int score = 0;
     private List<MastermindObserver> listObservers;
 
@@ -24,11 +23,14 @@ public class Manche {
 
     public Tentative createTentative()
     {
-        tentativesCount++;
         Tentative tenta = new Tentative(tailleCombinaison);
-        this.tentativeActuelle = tenta;
         notifyObserversStartTentative(tailleCombinaison);
         return tenta;
+    }
+
+    public void addTentative(Tentative tentative)
+    {
+        listTentatives.add(tentative);
     }
 
     //----------------------------------------------
@@ -42,12 +44,14 @@ public class Manche {
     //----------------------------------------------
     //Fonctions de vérification (calcul)
     //----------------------------------------------
-    public void verifierCombinaisonIndices(){
+    public boolean verifierCombinaisonIndices(){
         //On parcourt la combinaison secrète en vérifiant deux choses :
         //Si la couleur est la bonne, on donne la couleur Noir au bon index
         //Sinon, on regarde si la couleur est quand même dans la combi secrète
         //Auquel cas on mettra un Blanc, sinon on ne met rien
         boolean finished = true;
+        Tentative tentativeActuelle = listTentatives.get(listTentatives.size() - 1);
+
         for(int i = 0; i<tailleCombinaison; i++)
         {
             if (combinaisonSecrete.getCombinaison()[i] == tentativeActuelle.getCombinaison().getCombinaison()[i])
@@ -66,17 +70,19 @@ public class Manche {
             }
         }
 
-        this.isFinished = finished;
-        notifyObserversUpdateIndice(tentativeActuelle.getIndices());
+
+        notifyOberserversAddTentativeUpdateIndice(tentativeActuelle, tentativeActuelle.getIndices());
 
         if(finished)
         {
             notifyOberserversNewManche(true);
         }
-        else if(tentativesCount == nbTentativesMax)
+        else if((listTentatives.size() - 1) == nbTentativesMax)
         {
             notifyOberserversNewManche(false);
         }
+
+        return finished;
     }
     public Boolean couleurDansCombinaison(Combinaison combinaisonSecrete, Couleurs couleur){
         for(Couleurs couleursSec : combinaisonSecrete.getCombinaison()){
@@ -87,10 +93,6 @@ public class Manche {
         return false;
     }
 
-    public boolean isFinished()
-    {
-        return this.isFinished;
-    }
 
     public void upgradeScore()
     {
@@ -110,20 +112,19 @@ public class Manche {
         }
     }
 
-
-    private void notifyObserversUpdateIndice(Indice[] indice)
-    {
-        for (MastermindObserver observer: listObservers) {
-            observer.updateIndice(indice);
-        }
-    }
-
     private void notifyOberserversNewManche(boolean isFinished)
     {
         for (MastermindObserver observer: listObservers) {
             observer.newManche(isFinished);
         }
     }
+    private void notifyOberserversAddTentativeUpdateIndice(Tentative tentative, Indice[] indices)
+    {
+        for (MastermindObserver observer: listObservers) {
+            observer.addTentativeUpdateIndice(tentative, indices);
+        }
+    }
+
 
 
 }

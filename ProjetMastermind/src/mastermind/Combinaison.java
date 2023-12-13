@@ -16,6 +16,15 @@ public class Combinaison {
         return combinaison;
     }
 
+    public void setCouleur(Couleurs couleur, int index){
+        combinaison[index] = couleur;
+    }
+
+    public int getLength()
+    {
+        return combinaison.length;
+    }
+
     public void genererCombinaisonAleatoire(Integer nbPionsDispo){
 
 

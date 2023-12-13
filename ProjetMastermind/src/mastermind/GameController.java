@@ -72,11 +72,9 @@ public class GameController {
     public void validerTentative(Combinaison tentative)
     {
         tentativeActuelle.setCombinaisonCouleur(tentative);
+        mancheActuelle.addTentative(tentativeActuelle);
+        boolean isFinished = mancheActuelle.verifierCombinaisonIndices();
         tentativesCount++;
-        mancheActuelle.verifierCombinaisonIndices();
-
-
-        System.out.println("Tentative N°" + tentativesCount + " sur "+nbTentatives);
     }
 
 

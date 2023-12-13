@@ -12,7 +12,6 @@ public class ViewGame extends JFrame implements MastermindObserver {
     JPanel mainPanel = new JPanel();
     JPanel tentativePanel = new JPanel();
     JPanel avaibleColors = new JPanel();
-    JPanel archiveTentativeActuelle = new JPanel();
 
     private JLabel selectedPion;
     private ImageIcon draggedIcon;
@@ -26,7 +25,7 @@ public class ViewGame extends JFrame implements MastermindObserver {
     {
         super("Mastermind");
         this.controller = controller;
-        setSize(400, 800);
+        setSize(600, 800);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setLayout(new BorderLayout());
         mainPanel.setLayout(new GridLayout(8,1));
@@ -80,24 +79,16 @@ public class ViewGame extends JFrame implements MastermindObserver {
         validerButton.addActionListener( actionEvent  -> {
             Combinaison tentative = new Combinaison(nbPionsCombi);
 
-            JPanel archiveTentative = new JPanel();
-            archiveTentative.setLayout(new GridLayout(1, 2*nbPionsCombi));
-
-            archiveTentativeActuelle = archiveTentative;
 
             int i = 0;
             for (JLabel j: emptyCells)
             {
-                ImageIcon originalIcon = (ImageIcon) j.getIcon();
-                JLabel duplicatedLabel = new JLabel(originalIcon);
-                archiveTentative.add(duplicatedLabel);
-                tentative.getCombinaison()[i] = ((Couleurs)j.getClientProperty("couleur"));
+                tentative.setCouleur(((Couleurs)j.getClientProperty("couleur")), i);
 
                 j.putClientProperty("couleur", null);
                 j.setIcon(null);
                 i++;
             }
-            mainPanel.add(archiveTentative);
 
             //Le bouton permet d'appeller la fonction de verification dans le game controller
             try {
@@ -111,11 +102,48 @@ public class ViewGame extends JFrame implements MastermindObserver {
         tentativePanel.add(validerButton);
     }
 
+    public void addTentativeUpdateIndice(Tentative tentative, Indice[] indices)
+    {
+        JPanel archiveTentative = new JPanel();
+        archiveTentative.setLayout(new GridLayout(1, 2));
+
+        JPanel tentativePanel = new JPanel();
+        tentativePanel.setLayout(new GridLayout(1, nbPionsCombi));
+
+        JPanel indicePanel = new JPanel();
+        indicePanel.setBorder(new LineBorder(Color.BLACK));
+        indicePanel.setLayout(new GridLayout(1, nbPionsCombi));
+
+
+        for(int i = 0; i < tentative.getCombinaison().getLength(); i++)
+        {
+            ImageIcon originalIcon = new ImageIcon("assets/pions/" + tentative.getCouleurs()[i] + ".png");
+            JLabel duplicatedLabel = new JLabel(originalIcon);
+            tentativePanel.add(duplicatedLabel);
+        }
+        archiveTentative.add(tentativePanel);
+
+        for(int i = 0; i < indices.length; i++)
+        {
+            JLabel j = new JLabel();
+            switch (indices[i])
+            {
+                case NOIR -> j.setIcon(new ImageIcon("assets/indices/NOIR.png"));
+                case BLANC -> j.setIcon(new ImageIcon("assets/indices/BLANC.png"));
+                case VIDE -> j.setIcon(new ImageIcon("assets/indices/VIDE.png"));
+            }
+
+            indicePanel.add(j);
+        }
+
+        archiveTentative.add(indicePanel);
+        mainPanel.add(archiveTentative);
+    }
+
 
     public void newManche(boolean isWin)
     {
         mainPanel.removeAll();
-        archiveTentativeActuelle = null;
 
         JLabel messageWin = new JLabel();
 
@@ -136,23 +164,6 @@ public class ViewGame extends JFrame implements MastermindObserver {
             this.remove(continuer);
         });
         add(continuer);
-    }
-
-
-    public void updateIndice(Indice[] indices)
-    {
-        for(int i = 0; i < indices.length; i++)
-        {
-            JLabel j = new JLabel();
-            j.setOpaque(true);
-            switch (indices[i])
-            {
-                case NOIR -> j.setBackground(Color.BLACK);
-                case BLANC -> j.setBackground(Color.GRAY);
-                case VIDE -> j.setBackground(Color.WHITE);
-            }
-            archiveTentativeActuelle.add(j);
-        }
     }
 
     class PionMouseListener extends MouseAdapter {
