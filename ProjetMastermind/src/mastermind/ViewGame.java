@@ -12,8 +12,11 @@ public class ViewGame extends JFrame implements MastermindObserver {
     JPanel mainPanel = new JPanel();
     JPanel tentativePanel = new JPanel();
     JPanel avaibleColors = new JPanel();
+    JPanel archiveTentativeActuelle = new JPanel();
+
     private JLabel selectedPion;
     private ImageIcon draggedIcon;
+    private int nbPionsCombi;
 
 
     private JLabel[] pions;
@@ -37,6 +40,7 @@ public class ViewGame extends JFrame implements MastermindObserver {
 
     public void init(int nbTentatives, int nbPionsCombinaison)
     {
+        nbPionsCombi = nbPionsCombinaison;
         mainPanel.setLayout(new GridLayout(nbTentatives, 2));
         tentativePanel.setLayout(new GridLayout(1, nbPionsCombinaison + 1));
     }
@@ -77,7 +81,9 @@ public class ViewGame extends JFrame implements MastermindObserver {
             Couleurs[] tentative = new Couleurs[nbPionsCombi];
 
             JPanel archiveTentative = new JPanel();
-            archiveTentative.setLayout(new GridLayout(1, nbPionsCombi));
+            archiveTentative.setLayout(new GridLayout(1, 2*nbPionsCombi));
+
+            archiveTentativeActuelle = archiveTentative;
 
             int i = 0;
             for (JLabel j: emptyCells)
@@ -98,6 +104,7 @@ public class ViewGame extends JFrame implements MastermindObserver {
                 controller.validerTentative(tentative);
             }
             catch (Exception e) {
+                System.out.println("tentative" + tentative.length);
                 System.out.println(e.getMessage());
             }
         });
@@ -105,10 +112,36 @@ public class ViewGame extends JFrame implements MastermindObserver {
     }
 
 
+    public void newManche(boolean isWin)
+    {
+        mainPanel.removeAll();
+        archiveTentativeActuelle = null;
+
+        JLabel messageWin = new JLabel();
+
+        if(isWin)
+        {
+            messageWin.setText("Gagné");
+        }
+        else
+        {
+            messageWin.setText("Perdu");
+        }
+
+        add(messageWin);
+
+        JButton continuer = new JButton("continuer");
+        continuer.addActionListener( actionEvent  -> {
+            this.remove(messageWin);
+            this.remove(continuer);
+        });
+        add(continuer);
+    }
+
+
     public void updateIndice(Indice[] indices)
     {
-        JPanel indicesPanel = new JPanel();
-        for(int i = 0; i < 4; i++)
+        for(int i = 0; i < indices.length; i++)
         {
             JLabel j = new JLabel();
             j.setOpaque(true);
@@ -118,15 +151,13 @@ public class ViewGame extends JFrame implements MastermindObserver {
                 case BLANC -> j.setBackground(Color.GRAY);
                 case VIDE -> j.setBackground(Color.WHITE);
             }
-            indicesPanel.add(j);
+            archiveTentativeActuelle.add(j);
         }
-        mainPanel.add(indicesPanel);
     }
 
     class PionMouseListener extends MouseAdapter {
         @Override
         public void mousePressed(MouseEvent e) {
-            System.out.println("mouse pressed");
             selectedPion = (JLabel)e.getSource();
             draggedIcon = (ImageIcon) selectedPion.getIcon();
         }
@@ -136,8 +167,6 @@ public class ViewGame extends JFrame implements MastermindObserver {
         @Override
         public void mouseReleased(MouseEvent e) {
             JLabel emptyCell = (JLabel) e.getSource();
-
-            System.out.println(selectedPion == emptyCell);
             if (selectedPion != null) {
                 ImageIcon icon = (ImageIcon) selectedPion.getIcon();
                 emptyCell.setIcon(icon);

@@ -52,4 +52,7 @@ public class Partie {
             observer.showAvaibleColors(couleursDispo);
         }
     }
+
+
+
 }
