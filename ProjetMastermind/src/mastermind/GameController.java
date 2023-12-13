@@ -69,7 +69,7 @@ public class GameController {
         System.out.println("--- Partie terminée avec comme score : " + partie.getScore() + "\n");*/
     }
 
-    public void validerTentative(Couleurs[] tentative)
+    public void validerTentative(Combinaison tentative)
     {
         tentativeActuelle.setCombinaisonCouleur(tentative);
         tentativesCount++;

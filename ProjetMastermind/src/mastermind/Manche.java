@@ -3,7 +3,7 @@ package mastermind;
 import java.util.*;
 
 public class Manche {
-    private Couleurs[] combinaisonSecrete;
+    private Combinaison combinaisonSecrete;
     private int nbTentativesMax;
     private int tentativesCount = 0;
     private int tailleCombinaison;
@@ -17,7 +17,7 @@ public class Manche {
     public Manche(int nbPionsDispo, Integer tailleCombinaison, Integer nombreTentatives, List<MastermindObserver> obervers){
         this.nbPionsDispo = nbPionsDispo;
         this.tailleCombinaison = tailleCombinaison;
-        combinaisonSecrete = new Couleurs[nbPionsDispo];
+        combinaisonSecrete = new Combinaison(tailleCombinaison);
         nbTentativesMax = nombreTentatives;
         listObservers = obervers;
     }
@@ -31,43 +31,13 @@ public class Manche {
         return tenta;
     }
 
-    public Tentative getTentativeActuelle()
-    {
-        return this.tentativeActuelle;
-    }
-
-    public Couleurs[] getCombinaisonSecrete(){
-        return combinaisonSecrete;
-    }
-
-
-
     //----------------------------------------------
     //Générer la combinaison aléatoire de la manche
     //----------------------------------------------
     public void genererCombinaisonAleatoire()
     {
-        Random rnd = new Random();
-        int temp;
-        //On crée la liste des couleurs disponibles pour la combinaison secrète
-        List<Couleurs> dispo = new ArrayList<>();
-
-
-        for(int j = 0; j<nbPionsDispo; j++)
-        {
-            dispo.add(Couleurs.values()[j]);
-        }
-
-        //La liste de couleurs disponibles est créée, on peut mtn créer notre combinaison secrète
-        for(int i =0; i<nbPionsDispo; i++)
-        {
-            temp = rnd.nextInt(dispo.size());
-            combinaisonSecrete[i]=dispo.get(temp);
-        }
+        combinaisonSecrete.genererCombinaisonAleatoire(nbPionsDispo);
     }
-
-
-
 
     //----------------------------------------------
     //Fonctions de vérification (calcul)
@@ -80,11 +50,11 @@ public class Manche {
         boolean finished = true;
         for(int i = 0; i<tailleCombinaison; i++)
         {
-            if (combinaisonSecrete[i] == tentativeActuelle.getCombinaison()[i])
+            if (combinaisonSecrete.getCombinaison()[i] == tentativeActuelle.getCombinaison().getCombinaison()[i])
             {
                 tentativeActuelle.setIndicesCouleurs(Indice.NOIR, i);
             }
-            else if (couleurDansCombinaison(combinaisonSecrete, tentativeActuelle.getCombinaison()[i]))
+            else if (couleurDansCombinaison(combinaisonSecrete, tentativeActuelle.getCombinaison().getCombinaison()[i]))
             {
                 tentativeActuelle.setIndicesCouleurs(Indice.BLANC, i);
                 finished = false;
@@ -108,8 +78,8 @@ public class Manche {
             notifyOberserversNewManche(false);
         }
     }
-    public Boolean couleurDansCombinaison(Couleurs[] combinaisonSecrete, Couleurs couleur){
-        for(Couleurs couleursSec : combinaisonSecrete){
+    public Boolean couleurDansCombinaison(Combinaison combinaisonSecrete, Couleurs couleur){
+        for(Couleurs couleursSec : combinaisonSecrete.getCombinaison()){
             if(couleur==couleursSec){
                 return true;
             }

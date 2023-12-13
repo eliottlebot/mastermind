@@ -78,7 +78,7 @@ public class ViewGame extends JFrame implements MastermindObserver {
 
         JButton validerButton = new JButton("Valider");
         validerButton.addActionListener( actionEvent  -> {
-            Couleurs[] tentative = new Couleurs[nbPionsCombi];
+            Combinaison tentative = new Combinaison(nbPionsCombi);
 
             JPanel archiveTentative = new JPanel();
             archiveTentative.setLayout(new GridLayout(1, 2*nbPionsCombi));
@@ -91,7 +91,7 @@ public class ViewGame extends JFrame implements MastermindObserver {
                 ImageIcon originalIcon = (ImageIcon) j.getIcon();
                 JLabel duplicatedLabel = new JLabel(originalIcon);
                 archiveTentative.add(duplicatedLabel);
-                tentative[i] = ((Couleurs)j.getClientProperty("couleur"));
+                tentative.getCombinaison()[i] = ((Couleurs)j.getClientProperty("couleur"));
 
                 j.putClientProperty("couleur", null);
                 j.setIcon(null);
@@ -104,7 +104,7 @@ public class ViewGame extends JFrame implements MastermindObserver {
                 controller.validerTentative(tentative);
             }
             catch (Exception e) {
-                System.out.println("tentative" + tentative.length);
+                System.out.println("tentative" + tentative.getCombinaison().length);
                 System.out.println(e.getMessage());
             }
         });
