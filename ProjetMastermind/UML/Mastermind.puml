@@ -15,7 +15,8 @@ package models
     {
         -nomJoueur : String
         -meilleurScore : Integer
-        +createPartie() : Partie
+        +createPartie(nbManches: Integer, nbPionsDispo: Integer, nbPionsCombinaison: Integer, nbTentatives: Integer): Partie
+        +setJoueur(nom: String)
         +addObserver(mastermindObserver: MastermindObserver)
         -notifyObserversInit(nbTentatives: Integer, nbPionsCombi: Integer)
     }
@@ -28,7 +29,7 @@ package models
         - nbPionsCombinaison: Integer
         - nbTentatives: Integer
         - score: Integer
-        +<<create>>Partie(nbManches : Integer, nbPionsDispo : Integer, tailleCombinaison : Integer, nbTentatives : Integer)
+        + <<create>> Partie(observers: MastermindObserver[*], nbManches: Integer, nbPionsDispo: Integer, nbPionsCombinaison: Integer, nbTentatives: Integer)
         + createManche(): Manche
         + upgradeScore(nb: Integer)
         + getScore(): Integer
@@ -44,7 +45,7 @@ package models
         - isFinished: Boolean
         - score: Integer
 
-        +<<create>>Manche(tailleCombinaison : Integer, nombreTentatives : Integer)
+        + <<create>> Manche(nbPionsDispo: Integer, tailleCombinaison: Integer, nombreTentatives: Integer, obervers: MastermindObserver[*])
         + createTentative(i: Integer): Tentative
         + getTentativeActuelle(): Tentative
         + getCombinaisonSecrete(): CouleurPion[]
@@ -100,7 +101,7 @@ package models
 
 package views
 {
-    class ViewStart implements mastermindObserver
+    class ViewStart
     {
         + <<create>> ViewStart(controller: GameController)
         + setParameters()
@@ -109,7 +110,7 @@ package views
 
     class ViewGame implements mastermindObserver
     {
-        - isDragging: Boolean
+        - indiceType: Integer
         + init(nbTentatives: Integer, nbPionsCombinaison: Integer)
         + showAvaibleColors(couleursDispo: CouleurPion[])
         + startTentative(nbPionsCombi: Integer)
@@ -120,7 +121,7 @@ package views
     }
 
 
-    class ViewEnd implements mastermindObserver
+    class ViewEnd
     {
 
     }
@@ -139,8 +140,9 @@ package controller
         - manchesCount: Integer
         - tentativesCount: Integer
         + <<create>> GameController(plateau: Plateau)
-        +placerPionCombinaison(index : Integer, couleur : CouleurPion)
-        +validerTentative(tentative: CouleurPion[])
+        + gameStart()
+        + createPartie(nbManches: Integer, nbPionsDispo: Integer, nbPionsCombinaison: Integer, nbTentatives: Integer)
+        + validerTentative(tentative: CouleurPion[])
     }
 }
 
@@ -173,7 +175,6 @@ Main ..> Plateau : <<use>>
 Main ..> GameController : <<use>>
 Main ..> ViewGame : <<use>>
 Main ..> ViewStart : <<use>>
-Main ..> ViewEnd : <<use>>
 
 
 @enduml

@@ -85,14 +85,4 @@ public class GameController {
         }
         System.out.println("Tentative N°" + tentativesCount + " sur "+nbTentatives);
     }
-
-    public void setAffichageIndiceFacile(){
-
-    }
-    public void setAffichageIndiceClassique(){
-
-    }
-    public void setAffichageIndiceNumeric(){
-
-    }
 }
