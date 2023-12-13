@@ -5,6 +5,7 @@ public interface MastermindObserver{
     public void showAvaibleColors(Couleurs[] couleursDispo);
     public void startTentative(int nbPionsCombi);
     public void updateIndice(Indice[] indices);
+    public void newManche(boolean isWin);
 
     /*public void indiceUpdate(Indice[] indices);
     public void tentativeUpdate(Tentative tentative);

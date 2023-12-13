@@ -75,14 +75,10 @@ public class GameController {
         tentativesCount++;
         mancheActuelle.verifierCombinaisonIndices();
 
-        if(mancheActuelle.isFinished() || tentativesCount > nbTentatives)
-        {
-            System.out.println("manche terminée");
-        }
-        else
-        {
-            Indice indice[] = tentativeActuelle.getIndices();
-        }
+
         System.out.println("Tentative N°" + tentativesCount + " sur "+nbTentatives);
     }
+
+
+
 }

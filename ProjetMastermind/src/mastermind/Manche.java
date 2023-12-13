@@ -5,6 +5,7 @@ import java.util.*;
 public class Manche {
     private Couleurs[] combinaisonSecrete;
     private int nbTentativesMax;
+    private int tentativesCount = 0;
     private int tailleCombinaison;
     private int nbPionsDispo;
     private Tentative tentativeActuelle;
@@ -16,13 +17,14 @@ public class Manche {
     public Manche(int nbPionsDispo, Integer tailleCombinaison, Integer nombreTentatives, List<MastermindObserver> obervers){
         this.nbPionsDispo = nbPionsDispo;
         this.tailleCombinaison = tailleCombinaison;
-        combinaisonSecrete = new Couleurs[tailleCombinaison];
+        combinaisonSecrete = new Couleurs[nbPionsDispo];
         nbTentativesMax = nombreTentatives;
         listObservers = obervers;
     }
 
     public Tentative createTentative()
     {
+        tentativesCount++;
         Tentative tenta = new Tentative(tailleCombinaison);
         this.tentativeActuelle = tenta;
         notifyObserversStartTentative(tailleCombinaison);
@@ -50,16 +52,17 @@ public class Manche {
         //On crée la liste des couleurs disponibles pour la combinaison secrète
         List<Couleurs> dispo = new ArrayList<>();
 
-        for(int j = 0; j<tailleCombinaison; j++)
+
+        for(int j = 0; j<nbPionsDispo; j++)
         {
             dispo.add(Couleurs.values()[j]);
         }
 
         //La liste de couleurs disponibles est créée, on peut mtn créer notre combinaison secrète
-        for(int i =0; i<tailleCombinaison; i++){
+        for(int i =0; i<nbPionsDispo; i++)
+        {
             temp = rnd.nextInt(dispo.size());
             combinaisonSecrete[i]=dispo.get(temp);
-            dispo.remove(temp);
         }
     }
 
@@ -75,13 +78,13 @@ public class Manche {
         //Sinon, on regarde si la couleur est quand même dans la combi secrète
         //Auquel cas on mettra un Blanc, sinon on ne met rien
         boolean finished = true;
-        for(int i = 0; i<combinaisonSecrete.length; i++)
+        for(int i = 0; i<tailleCombinaison; i++)
         {
-            if(combinaisonSecrete[i]==tentativeActuelle.getCombinaison()[i])
+            if (combinaisonSecrete[i] == tentativeActuelle.getCombinaison()[i])
             {
                 tentativeActuelle.setIndicesCouleurs(Indice.NOIR, i);
             }
-            else if(couleurDansCombinaison(combinaisonSecrete, tentativeActuelle.getCombinaison()[i]))
+            else if (couleurDansCombinaison(combinaisonSecrete, tentativeActuelle.getCombinaison()[i]))
             {
                 tentativeActuelle.setIndicesCouleurs(Indice.BLANC, i);
                 finished = false;
@@ -93,8 +96,17 @@ public class Manche {
             }
         }
 
-        System.out.println("fonction terminée ");
         this.isFinished = finished;
+        notifyObserversUpdateIndice(tentativeActuelle.getIndices());
+
+        if(finished)
+        {
+            notifyOberserversNewManche(true);
+        }
+        else if(tentativesCount == nbTentativesMax)
+        {
+            notifyOberserversNewManche(false);
+        }
     }
     public Boolean couleurDansCombinaison(Couleurs[] combinaisonSecrete, Couleurs couleur){
         for(Couleurs couleursSec : combinaisonSecrete){
@@ -133,6 +145,13 @@ public class Manche {
     {
         for (MastermindObserver observer: listObservers) {
             observer.updateIndice(indice);
+        }
+    }
+
+    private void notifyOberserversNewManche(boolean isFinished)
+    {
+        for (MastermindObserver observer: listObservers) {
+            observer.newManche(isFinished);
         }
     }
 
