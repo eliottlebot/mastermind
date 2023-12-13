@@ -1,20 +1,20 @@
 package mastermind;
 public class Tentative {
-    private Couleurs[] combinaisonCouleur;
+    private Combinaison combinaisonCouleur;
     public Indice[] indices;
 
 
     public Tentative(int tailleCombinaison) {
-        combinaisonCouleur = new Couleurs[tailleCombinaison];
+        combinaisonCouleur = new Combinaison(tailleCombinaison);
         indices = new Indice[tailleCombinaison];
     }
 
-    public void setCombinaisonCouleur(Couleurs[] combinaisonCouleur)
+    public void setCombinaisonCouleur(Combinaison combinaisonCouleur)
     {
         this.combinaisonCouleur = combinaisonCouleur;
     }
 
-    public Couleurs[] getCombinaison()
+    public Combinaison getCombinaison()
     {
         return this.combinaisonCouleur;
     }

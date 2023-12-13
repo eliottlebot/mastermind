@@ -48,8 +48,7 @@ package models
         + <<create>> Manche(nbPionsDispo: Integer, tailleCombinaison: Integer, nombreTentatives: Integer, obervers: MastermindObserver[*])
         + createTentative(i: Integer): Tentative
         + getTentativeActuelle(): Tentative
-        + getCombinaisonSecrete(): CouleurPion[]
-        + genererCombinaisonAleatoire()
+        + getCombinaisonSecrete(): Combinaison
         + verifierCombinaisonIndices()
         + couleurDansCombinaison(combinaisonSecrete: CouleurPion[], couleur: CouleurPion): Boolean
         + isFinished(): Boolean
@@ -63,9 +62,16 @@ package models
     {
         +<<create>>Tentative(tailleCombinaison : Integer)
         + setTentative(tentative: Indice[])
-        + getTentative(): CouleurPion[]
+        + getCombinaison(): Combinaison
         + getIndices(): Indice[]
         + setIndicesCouleurs(indice: Indice, index: Integer)
+    }
+
+    class Combinaison
+    {
+        +<<create>>Combinaison(tailleCombinaison : Integer)
+        +getCombinaison() : CouleurPion[*]
+        +genererCombinaisonAleatoire(dispoPions : Integer)
     }
 
 
@@ -154,10 +160,7 @@ Partie *---> "*\n -manche" Manche : Crée >
 Partie "*" o--> "*\n-listeObservers" mastermindObserver: observe <
 Manche "*" o--> "*\n-listeObservers" mastermindObserver: observe <
 Manche *--> Tentative : Crée
-Manche *--->"4..6 \n-combinaisonSecrète" CouleurPion : Possède >
 
-
-Tentative *--->"4..6 \n-combinaisonJoueur" CouleurPion : Possède >
 Tentative *--->"4..6 \n-indices" Indice : Possède >
 
 
@@ -175,6 +178,10 @@ Main ..> Plateau : <<use>>
 Main ..> GameController : <<use>>
 Main ..> ViewGame : <<use>>
 Main ..> ViewStart : <<use>>
+
+Manche *--> "1\n -combiSecrete" Combinaison
+Tentative *--> "1\n -combiJoueur" Combinaison
+Combinaison *--> "4..6\n possède" CouleurPion
 
 
 @enduml
