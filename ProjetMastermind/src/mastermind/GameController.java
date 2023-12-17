@@ -13,7 +13,6 @@ public class GameController {
     private boolean tentativeValidee = false;
 
     private int manchesCount = 0;
-    private int tentativesCount = 0;
 
 
     public GameController(Plateau plateau)
@@ -74,7 +73,6 @@ public class GameController {
         tentativeActuelle.setCombinaisonCouleur(tentative);
         mancheActuelle.addTentative(tentativeActuelle);
         boolean isFinished = mancheActuelle.verifierCombinaisonIndices();
-        tentativesCount++;
     }
 
 
