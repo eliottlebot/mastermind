@@ -4,6 +4,8 @@ public class GameController {
     private Partie partie;
     private Manche mancheActuelle;
     private Tentative tentativeActuelle;
+    private int nbManches;
+    private int manchesCount = 0;
 
 
     public GameController(Plateau plateau)
@@ -13,6 +15,8 @@ public class GameController {
 
     public void createPartie(int nbManches, int nbPionsDispo, int nbPionsCombinaison, int nbTentatives)
     {
+
+        this.nbManches = nbManches;
         partie = plateau.createPartie(nbManches, nbPionsDispo, nbPionsCombinaison, nbTentatives);
         gameStart();
     }
@@ -36,7 +40,4 @@ public class GameController {
             gameStart();
         }
     }
-
-
-
 }

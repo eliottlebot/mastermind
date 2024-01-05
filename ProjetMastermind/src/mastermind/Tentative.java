@@ -1,12 +1,14 @@
 package mastermind;
+
+import java.util.Arrays;
+
 public class Tentative {
     private Combinaison combinaisonCouleur;
     public Indice[] indices;
-
-
     public Tentative(int tailleCombinaison) {
         combinaisonCouleur = new Combinaison(tailleCombinaison);
         indices = new Indice[tailleCombinaison];
+        Arrays.fill(indices, Indice.VIDE);
     }
 
     public void setCombinaisonCouleur(Combinaison combinaisonCouleur)

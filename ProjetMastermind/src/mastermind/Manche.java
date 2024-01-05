@@ -7,7 +7,6 @@ public class Manche {
     private int nbTentativesMax;
     private int tailleCombinaison;
     private int nbPionsDispo;
-
     private List<Tentative> listTentatives = new ArrayList<>();
     private int score = 0;
     private List<MastermindObserver> listObservers;
@@ -52,26 +51,30 @@ public class Manche {
 
         boolean finished = true;
 
+        //On récupère la tentative actuelle (la dernière tentative ajoutée à la manche actuelle)
         Tentative tentativeActuelle = listTentatives.get(listTentatives.size() - 1);
 
-        for(int i = 0; i<tailleCombinaison; i++)
-        {
-            if (combinaisonSecrete.getCombinaison()[i] == tentativeActuelle.getCombinaison().getCombinaison()[i])
-            {
+        //Premier tour de boucle parcourt la liste des couleurs, pour placer des poins noirs au bon endroit
+        ArrayList<Couleurs> couleurTrouvee = new ArrayList<>();
+        for(int i =0; i<tailleCombinaison; i++) {
+            if (combinaisonSecrete.getCombinaison()[i] == tentativeActuelle.getCombinaison().getCombinaison()[i]) {
                 tentativeActuelle.setIndicesCouleurs(Indice.NOIR, i);
+                couleurTrouvee.add(tentativeActuelle.getCombinaison().getCombinaison()[i]);
+            } else if (couleurDansCombinaison(combinaisonSecrete, tentativeActuelle.getCombinaison().getCombinaison()[i])) {
+                if (couleurTrouvee.contains(tentativeActuelle.getCombinaison().getCombinaison()[i])) {
+                    tentativeActuelle.setIndicesCouleurs(Indice.VIDE, i);
+                    finished = false;
+                } else {
+                    tentativeActuelle.setIndicesCouleurs(Indice.BLANC, i);
+                    finished = false;
+                }
             }
-            else if (couleurDansCombinaison(combinaisonSecrete, tentativeActuelle.getCombinaison().getCombinaison()[i]))
-            {
-                tentativeActuelle.setIndicesCouleurs(Indice.BLANC, i);
-                finished = false;
-            }
-            else
-            {
+            else{
                 tentativeActuelle.setIndicesCouleurs(Indice.VIDE, i);
                 finished = false;
             }
         }
-
+        System.out.println(Arrays.toString(tentativeActuelle.getIndices()));
 
         notifyOberserversAddTentativeUpdateIndice(tentativeActuelle, tentativeActuelle.getIndices());
 
