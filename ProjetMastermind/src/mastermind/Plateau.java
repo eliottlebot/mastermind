@@ -11,7 +11,6 @@ public class Plateau {
 
     public Partie createPartie(int nbManches, int nbPionsDispo, int nbPionsCombinaison, int nbTentatives)
     {
-        notifyObserversInit(nbTentatives, nbPionsCombinaison);
         return new Partie(listObservers, nbManches, nbPionsDispo, nbPionsCombinaison, nbTentatives);
     }
 
@@ -26,10 +25,5 @@ public class Plateau {
         listObservers.add(mastermindObserver);
     }
 
-    private void notifyObserversInit(int nbTentatives, int nbPionsCombi)
-    {
-        for (MastermindObserver observer: listObservers) {
-            observer.init(nbTentatives, nbPionsCombi);
-        }
-    }
+
 }

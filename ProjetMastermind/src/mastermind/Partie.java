@@ -1,12 +1,11 @@
 package mastermind;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 public class Partie {
     private int nbManches;
     private int nbPionsDispo;
     private int nbPionsCombinaison;
     private int nbTentatives;
+    private int mancheCount = 0;
     private int score = 0;
     private Manche mancheActuelle;
     private List<MastermindObserver> listObservers;
@@ -24,6 +23,8 @@ public class Partie {
 
     public Manche createManche()
     {
+        notifyObserversInit(nbTentatives, nbPionsCombinaison);
+        mancheCount++;
         mancheActuelle = new Manche(nbPionsDispo, nbPionsCombinaison, nbTentatives, listObservers);
         mancheActuelle.genererCombinaisonAleatoire();
         return mancheActuelle;
@@ -54,5 +55,20 @@ public class Partie {
     }
 
 
+    public int getManchesCount()
+    {
+        return this.mancheCount;
+    }
 
+    public int getNbManches()
+    {
+        return this.nbManches;
+    }
+
+    private void notifyObserversInit(int nbTentatives, int nbPionsCombi)
+    {
+        for (MastermindObserver observer: listObservers) {
+            observer.init(nbTentatives, nbPionsCombi);
+        }
+    }
 }

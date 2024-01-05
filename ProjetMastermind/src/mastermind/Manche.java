@@ -49,7 +49,9 @@ public class Manche {
         //Si la couleur est la bonne, on donne la couleur Noir au bon index
         //Sinon, on regarde si la couleur est quand même dans la combi secrète
         //Auquel cas on mettra un Blanc, sinon on ne met rien
+
         boolean finished = true;
+
         Tentative tentativeActuelle = listTentatives.get(listTentatives.size() - 1);
 
         for(int i = 0; i<tailleCombinaison; i++)
@@ -72,6 +74,8 @@ public class Manche {
 
 
         notifyOberserversAddTentativeUpdateIndice(tentativeActuelle, tentativeActuelle.getIndices());
+
+        System.out.println("fini : " + finished);
 
         if(finished)
         {
@@ -112,10 +116,10 @@ public class Manche {
         }
     }
 
-    private void notifyOberserversNewManche(boolean isFinished)
+    private void notifyOberserversNewManche(boolean isWin)
     {
         for (MastermindObserver observer: listObservers) {
-            observer.newManche(isFinished);
+            observer.newManche(isWin);
         }
     }
     private void notifyOberserversAddTentativeUpdateIndice(Tentative tentative, Indice[] indices)

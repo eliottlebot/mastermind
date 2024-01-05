@@ -105,7 +105,7 @@ package models
 
 
 
-package views
+package view
 {
     class ViewStart
     {
@@ -138,13 +138,6 @@ package controller
 {
     class GameController
     {
-        - nbManches: Integer
-        - nbPionsDispo: Integer
-        - nbPionsCombinaison: Integer
-        - nbTentatives: Integer
-        - tentativeValidee: Boolean
-        - manchesCount: Integer
-        - tentativesCount: Integer
         + <<create>> GameController(plateau: Plateau)
         + gameStart()
         + createPartie(nbManches: Integer, nbPionsDispo: Integer, nbPionsCombinaison: Integer, nbTentatives: Integer)
