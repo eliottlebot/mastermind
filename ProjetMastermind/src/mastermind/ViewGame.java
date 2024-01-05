@@ -156,6 +156,7 @@ public class ViewGame extends JFrame implements MastermindObserver {
             JLabel duplicatedLabel = new JLabel(originalIcon);
             tentativePanel.add(duplicatedLabel);
         }
+        //On ajoute la combinaison de couleurs au panel de la tentative
         archiveTentative.add(tentativePanel);
 
         for(int i = 0; i < indices.length; i++)
@@ -170,7 +171,7 @@ public class ViewGame extends JFrame implements MastermindObserver {
 
             indicePanel.add(j);
         }
-
+        //On ajoute le tableau d'indices au panel de la tentative
         archiveTentative.add(indicePanel);
 
         mainPanel.remove(nbTentative-tentativeCount);
