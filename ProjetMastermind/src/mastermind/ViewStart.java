@@ -1,8 +1,10 @@
 package mastermind;
 import javax.swing.*;
 import java.awt.*;
-public class ViewStart extends JFrame{
+
+public class ViewStart extends Views {
     GameController controller;
+    JTextField[] textFields;
 
 
     public ViewStart(GameController controller)
@@ -11,68 +13,87 @@ public class ViewStart extends JFrame{
         this.controller = controller;
         setSize(400, 800);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
+        this.setLayout(new BorderLayout());
 
 
         setParameters();
-        setVisible(true);
     }
 
     public void setParameters()
     {
-        JPanel parametre = new JPanel();
-        parametre.setLayout(new GridLayout(5, 2));
+        loadCustomFont(Font.TRUETYPE_FONT, 20);
+        JPanel mainPanel = new JPanel(new GridLayout(1, 2)); // GridLayout avec 1 ligne et 2 colonnes
 
-        JLabel lblNbManches = new JLabel();
-        lblNbManches.setText("Nombre de manches : ");
+        JPanel leftPanel = new JPanel(new GridLayout(5, 1)); // GridLayout pour la colonne de gauche
 
+        // Ajout de composants dans la colonne de gauche
+        String[] labels = {
+                "Nom du joueur : ",
+                "Nombre de manches : ",
+                "Nombre de pions disponibles : ",
+                "Nombre de pions dans les combinaisons : ",
+                "Nombre de tentatives : "
+        };
 
-        JLabel lblNbPionsDispo = new JLabel();
-        lblNbPionsDispo.setText("Nombre de pions disponibles : ");
+        for (String label : labels) {
+            leftPanel.add(new JLabel(label));
+        }
 
-        JLabel lblNbPionsCombinaison = new JLabel();
-        lblNbPionsCombinaison.setText("Nombre de pions dans les combinaisons : ");
+        JPanel rightPanel = new JPanel(new GridBagLayout()); // GridBagLayout pour la colonne de droite
 
-        JLabel lblNbTentatives = new JLabel();
-        lblNbTentatives.setText("Nombre de tentatives : ");
+        // Ajout de composants dans la colonne de droite avec des contraintes pour ajuster l'alignement
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = GridBagConstraints.RELATIVE;
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.insets = new Insets(5, 10, 5, 5);
 
+        JTextField[] textFields = {
+                new JTextField(""),
+                new JTextField("3"),
+                new JTextField("8"),
+                new JTextField("4"),
+                new JTextField("10")
+        };
 
-        JTextField txtNbManches = new JTextField("3");
+        for (JTextField textField : textFields) {
+            textField.setColumns(10);
+            gbc.gridx = 1; // Colonne 1 pour les champs de texte
+            gbc.fill = GridBagConstraints.HORIZONTAL; // Remplissage horizontal pour les champs de texte
+            rightPanel.add(textField, gbc);
+            gbc.gridx = 0; // Réinitialiser à la colonne 0 pour les labels suivants
+        }
 
-        JTextField txtNbPionsDispo = new JTextField("8");
+        mainPanel.add(leftPanel);
+        mainPanel.add(rightPanel);
 
-        JTextField txtNbPionsCombinaison = new JTextField("4");
-
-        JTextField txtNbTentatives = new JTextField("10");
-
-
-        parametre.add(lblNbManches);
-        parametre.add(txtNbManches);
-
-        parametre.add(lblNbPionsDispo);
-        parametre.add(txtNbPionsDispo);
-
-        parametre.add(lblNbPionsCombinaison);
-        parametre.add(txtNbPionsCombinaison);
-
-        parametre.add(lblNbTentatives);
-        parametre.add(txtNbTentatives);
-
+        this.add(mainPanel);
+        this.setVisible(true);
 
         JButton validerButton = new JButton("Valider");
+        validerButton.setForeground(Color.WHITE);
+        validerButton.setBackground(Color.BLUE);
+        validerButton.setPreferredSize(new Dimension(this.getWidth(), 100));
         validerButton.addActionListener( actionEvent  -> {
-            int nbManches = Integer.parseInt(txtNbManches.getText());
-            int nbPionsDispo = Integer.parseInt(txtNbPionsDispo.getText());
-            int nbPionsCombi = Integer.parseInt(txtNbPionsCombinaison.getText());
-            int nbTenta = Integer.parseInt(txtNbTentatives.getText());
+            String nomJoueur = textFields[0].getText();
+            int nbManches = Integer.parseInt(textFields[1].getText());
+            int nbPionsDispo = Integer.parseInt(textFields[2].getText());
+            int nbPionsCombi = Integer.parseInt(textFields[3].getText());
+            int nbTenta = Integer.parseInt(textFields[4].getText());
 
             try {
                 this.dispose();
-                controller.createPartie(nbManches, nbPionsDispo, nbPionsCombi, nbTenta);
+                controller.createPartie(nomJoueur, nbManches, nbPionsDispo, nbPionsCombi, nbTenta);
             } catch (Exception e) {
             }
 
         });
-        parametre.add(validerButton);
-        this.add(parametre);
+        this.add(validerButton, BorderLayout.SOUTH);
+
+        setCustomFontForComponents(this);
+        this.pack();
     }
+
+
+
 }
