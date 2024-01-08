@@ -30,20 +30,16 @@ BLANC
 
 }
 Class mastermind.GameController{
-+ <<create>> GameController(plateau: Plateau)
++ <<create>> GameController(plateau: Plateau, viewEnd: ViewEnd)
 
 
 
 
-- nbManches: Integer
-- nbPionsDispo: Integer
-- nbPionsCombinaison: Integer
-- nbTentatives: Integer
-- tentativeValidee: Boolean
-- manchesCount: Integer
-+ createPartie(nbManches: Integer, nbPionsDispo: Integer, nbPionsCombinaison: Integer, nbTentatives: Integer)
+
++ createPartie(nomJoueur: String, nbManches: Integer, nbPionsDispo: Integer, nbPionsCombinaison: Integer, nbTentatives: Integer)
 + gameStart()
 + validerTentative(tentative: Combinaison)
++ giveUpManche()
 
 }
 
@@ -51,6 +47,7 @@ mastermind.GameController o-- "plateau"mastermind.Plateau
 mastermind.GameController o-- "partie"mastermind.Partie
 mastermind.GameController o-- "mancheActuelle"mastermind.Manche
 mastermind.GameController o-- "tentativeActuelle"mastermind.Tentative
+mastermind.GameController o-- "viewEnd"mastermind.ViewEnd
 mastermind.GameController --> mastermind.Combinaison: validerTentative
 
 
@@ -77,15 +74,18 @@ Class mastermind.Manche{
 
 - score: Integer
 
+
 + createTentative(): Tentative
 + addTentative(tentative: Tentative)
 + genererCombinaisonAleatoire()
 + verifierCombinaisonIndices(): Boolean
 + couleurDansCombinaison(combinaisonSecrete: Combinaison, couleur: Couleurs): Boolean
++ initCompteur(compteur: Couleurs[*])
 + upgradeScore()
 + getScore(): Integer
++ giveUp()
 - notifyObserversStartTentative(nbPionsCombi: Integer)
-- notifyOberserversNewManche(isFinished: Boolean)
+- notifyOberserversNewManche(isWin: Boolean)
 - notifyOberserversAddTentativeUpdateIndice(tentative: Tentative, indices: void)
 
 }
@@ -93,6 +93,7 @@ Class mastermind.Manche{
 mastermind.Manche o-- "combinaisonSecrete"mastermind.Combinaison
 mastermind.Manche o--- "listTentatives"mastermind.Tentative
 mastermind.Manche o--- "listObservers"mastermind.MastermindObserver
+mastermind.Manche o--- "compteurCouleurs"mastermind.Couleurs
 mastermind.Manche --> mastermind.Tentative: addTentative
 mastermind.Manche --> mastermind.Combinaison: couleurDansCombinaison
 mastermind.Manche --> mastermind.Couleurs: couleurDansCombinaison
@@ -114,6 +115,7 @@ Class mastermind.Partie{
 - nbPionsDispo: Integer
 - nbPionsCombinaison: Integer
 - nbTentatives: Integer
+- mancheCount: Integer
 - score: Integer
 
 
@@ -121,6 +123,9 @@ Class mastermind.Partie{
 + upgradeScore(nb: Integer)
 + getScore(): Integer
 - notifyObserversShowAvaibleColors()
++ getManchesCount(): Integer
++ getNbManches(): Integer
+- notifyObserversInit(nbTentatives: Integer, nbPionsCombi: Integer)
 
 }
 
@@ -136,7 +141,7 @@ Class mastermind.Plateau{
 + createPartie(nbManches: Integer, nbPionsDispo: Integer, nbPionsCombinaison: Integer, nbTentatives: Integer): Partie
 + setJoueur(nom: String)
 + addObserver(mastermindObserver: MastermindObserver)
-- notifyObserversInit(nbTentatives: Integer, nbPionsCombi: Integer)
++ getNomJoueur(): String
 
 }
 
@@ -163,11 +168,12 @@ mastermind.Tentative --> mastermind.Indice: setIndicesCouleurs
 
 Class mastermind.ViewEnd{
 + <<create>> ViewEnd()
++ end(nomJoueur: String, score: Integer)
 
 }
 
 
-
+mastermind.ViewEnd ---|> mastermind.Views
 Class mastermind.ViewGame{
 + <<create>> ViewGame(controller: GameController)
 
@@ -177,6 +183,8 @@ Class mastermind.ViewGame{
 
 
 - nbPionsCombi: Integer
+- tentativeCount: Integer
+- nbTentative: Integer
 - pions: void
 - emptyCells: void
 + init(nbTentatives: Integer, nbPionsCombinaison: Integer)
@@ -191,17 +199,29 @@ mastermind.ViewGame ..|> mastermind.MastermindObserver
 mastermind.ViewGame o-- "controller"mastermind.GameController
 mastermind.ViewGame --> mastermind.Tentative: addTentativeUpdateIndice
 
+mastermind.ViewGame ---|> mastermind.Views
+Class mastermind.Views{
++ <<create>> Views(nom: String)
+
++ loadCustomFont(style: Integer, size: Integer): Font
++ setCustomFontForComponents(container: Container)
++ setCustomFontForComponents(container: Container, Xfont: Font)
++ setCustomFontForComponents(components: void)
+
+}
+
+
 
 Class mastermind.ViewStart{
 + <<create>> ViewStart(controller: GameController)
 
+textFields: void
 + setParameters()
 
 }
 
 mastermind.ViewStart o-- "controller"mastermind.GameController
 
-
+mastermind.ViewStart ---|> mastermind.Views
 
 @enduml
-

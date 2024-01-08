@@ -3,11 +3,11 @@ package mastermind;
 import javax.swing.*;
 import java.awt.*;
 
-public class ViewEnd extends JFrame {
+public class ViewEnd extends Views {
 
     public ViewEnd()
     {
-        super("Mastermind");
+        super("Fin de partie");
         setSize(400, 800);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setVisible(false);
@@ -44,6 +44,8 @@ public class ViewEnd extends JFrame {
         stats.add(rejouerButton);
         this.add(stats);
 
+        loadCustomFont(Font.TRUETYPE_FONT, 20);
+        setCustomFontForComponents(stats);
         setVisible(true);
     }
 }

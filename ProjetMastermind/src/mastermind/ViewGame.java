@@ -3,9 +3,11 @@ package mastermind;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.border.LineBorder;
 
-public class ViewGame extends JFrame implements MastermindObserver {
+public class ViewGame extends Views implements MastermindObserver {
     GameController controller;
     JPanel mainPanel = new JPanel();
     JPanel tentativePanel = new JPanel();
@@ -34,16 +36,17 @@ public class ViewGame extends JFrame implements MastermindObserver {
         this.add(mainPanel, BorderLayout.PAGE_START);//affichage des tentatives passées + indices
         add(tentativePanel, BorderLayout.CENTER);//tentative actuelle
         add(avaibleColors, BorderLayout.PAGE_END);//couleurs dispos
-        setVisible(true);
+        setVisible(false);
     }
 
     public void init(int nbTentatives, int nbPionsCombinaison)
     {
+        setVisible(false);
         tentativeCount = 0;
         this.nbTentative = nbTentatives;
         nbPionsCombi = nbPionsCombinaison;
         mainPanel.setLayout(new GridLayout(nbTentatives, 1));
-        tentativePanel.setLayout(new GridLayout(1, nbPionsCombinaison + 1));
+        tentativePanel.setLayout(new GridLayout(1, nbPionsCombinaison + 3));
 
 
         for (int i = 0; i < nbTentatives; i++)
@@ -76,6 +79,7 @@ public class ViewGame extends JFrame implements MastermindObserver {
 
             mainPanel.add(fillPnl);
         }
+        setVisible(true);
     }
 
 
@@ -110,6 +114,8 @@ public class ViewGame extends JFrame implements MastermindObserver {
         }
 
         JButton validerButton = new JButton("Valider");
+        validerButton.setForeground(Color.WHITE);
+        validerButton.setBackground(Color.GREEN.darker().darker());
         validerButton.addActionListener( actionEvent  -> {
 
             Combinaison tentative = new Combinaison(nbPionsCombi);
@@ -133,7 +139,29 @@ public class ViewGame extends JFrame implements MastermindObserver {
         tentativePanel.add(validerButton);
 
 
+        JButton resetButton = new JButton("Reset tentative");
+        resetButton.setForeground(Color.WHITE);
+        resetButton.setBackground(Color.BLUE);
+        resetButton.addActionListener( actionEvent  -> {
+
+            //Le bouton permet d'appeller la méthode pour aller à la manche suivante dans le game controller
+            try {
+                for (JLabel j: emptyCells)
+                {
+                    j.putClientProperty("couleur", null);
+                    j.setIcon(null);
+                }
+            }
+            catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        });
+        tentativePanel.add(resetButton);
+
+
         JButton giveUpButton = new JButton("Abandonner");
+        giveUpButton.setForeground(Color.WHITE);
+        giveUpButton.setBackground(Color.RED.darker().darker());
         giveUpButton.addActionListener( actionEvent  -> {
 
             //Le bouton permet d'appeller la méthode pour aller à la manche suivante dans le game controller
@@ -145,6 +173,28 @@ public class ViewGame extends JFrame implements MastermindObserver {
             }
         });
         tentativePanel.add(giveUpButton);
+        //Changer la police des 3 boutons
+        //loadCustomFont(Font.TRUETYPE_FONT, 20);
+
+        //Container container = new Container();
+        Component[] container = new Component[3];
+        int i = 0;
+        for(Component c : tentativePanel.getComponents())
+        {
+            if(c instanceof JButton)
+            {
+                container[i] = c;
+                i++;
+            }
+        }
+
+        loadCustomFont(Font.TRUETYPE_FONT, 20);
+        //System.out.println("Appel changement police... : " + ((JButton)container[0]).getText() + " | " + ((JButton)container[1]).getText() + " | " +((JButton)container[2]).getText());
+        setCustomFontForComponents(container);
+
+        setVisible(true);
+
+
     }
 
     public void addTentativeUpdateIndice(Tentative tentative, Indice[] indices)
@@ -199,20 +249,22 @@ public class ViewGame extends JFrame implements MastermindObserver {
     {
         mainPanel.removeAll();
         tentativePanel.removeAll();
-        String messageWin;
+        JLabel messageWin = new JLabel();
+        messageWin.setFont(loadCustomFont(Font.TRUETYPE_FONT, 20));
 
         if(isWin)
         {
-            messageWin = "Gagné";
+            messageWin.setText("Gagné");
         }
         else
         {
-            messageWin = "Perdu";
+            messageWin.setText("Perdu");
         }
 
 
         ImageIcon icon = new ImageIcon("assets/icone/mastermind.jpg");
         JOptionPane.showMessageDialog(null, messageWin, "Fin de la manche", JOptionPane.INFORMATION_MESSAGE, icon);
+        setVisible(false);
     }
 
     class PionMouseListener extends MouseAdapter {
