@@ -112,6 +112,12 @@ public class Manche {
     }
 
 
+    public void giveUp()
+    {
+        notifyOberserversNewManche(false);
+    }
+
+
     private void notifyObserversStartTentative(int nbPionsCombi)
     {
         for (MastermindObserver observer: listObservers) {

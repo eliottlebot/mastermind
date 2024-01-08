@@ -25,5 +25,8 @@ public class Plateau {
         listObservers.add(mastermindObserver);
     }
 
-
+    public String getNomJoueur()
+    {
+        return this.nomJoueur;
+    }
 }

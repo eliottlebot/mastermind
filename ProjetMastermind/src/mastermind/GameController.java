@@ -4,19 +4,16 @@ public class GameController {
     private Partie partie;
     private Manche mancheActuelle;
     private Tentative tentativeActuelle;
-    private int nbManches;
-    private int manchesCount = 0;
+    private ViewEnd viewEnd;
 
-
-    public GameController(Plateau plateau)
+    public GameController(Plateau plateau, ViewEnd viewEnd)
     {
+        this.viewEnd = viewEnd;
         this.plateau = plateau;
     }
 
     public void createPartie(int nbManches, int nbPionsDispo, int nbPionsCombinaison, int nbTentatives)
     {
-
-        this.nbManches = nbManches;
         partie = plateau.createPartie(nbManches, nbPionsDispo, nbPionsCombinaison, nbTentatives);
         gameStart();
     }
@@ -29,15 +26,33 @@ public class GameController {
             mancheActuelle = partie.createManche();
             tentativeActuelle = mancheActuelle.createTentative();
         }
+        else
+        {
+            viewEnd.end(plateau.getNomJoueur(), partie.getScore());
+        }
     }
 
     public void validerTentative(Combinaison tentative)
     {
+        for (Couleurs c: tentative.getCombinaison())
+        {
+            if(c == null)
+            {
+                return;
+            }
+        }
         tentativeActuelle.setCombinaisonCouleur(tentative);
         mancheActuelle.addTentative(tentativeActuelle);
         if(mancheActuelle.verifierCombinaisonIndices())//manche terminée
         {
             gameStart();
         }
+    }
+
+
+    public void giveUpManche()
+    {
+        mancheActuelle.giveUp();
+        gameStart();
     }
 }

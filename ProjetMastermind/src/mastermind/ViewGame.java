@@ -111,16 +111,13 @@ public class ViewGame extends JFrame implements MastermindObserver {
 
         JButton validerButton = new JButton("Valider");
         validerButton.addActionListener( actionEvent  -> {
+
             Combinaison tentative = new Combinaison(nbPionsCombi);
-
-
             int i = 0;
             for (JLabel j: emptyCells)
             {
                 tentative.setCouleur(((Couleurs)j.getClientProperty("couleur")), i);
 
-                j.putClientProperty("couleur", null);
-                j.setIcon(null);
                 i++;
             }
 
@@ -129,15 +126,34 @@ public class ViewGame extends JFrame implements MastermindObserver {
                 controller.validerTentative(tentative);
             }
             catch (Exception e) {
-                System.out.println("tentative" + tentative.getCombinaison().length);
+                System.out.println("Erreur tentative : " + tentative.getCombinaison().length);
                 System.out.println(e.getMessage());
             }
         });
         tentativePanel.add(validerButton);
+
+
+        JButton giveUpButton = new JButton("Abandonner");
+        giveUpButton.addActionListener( actionEvent  -> {
+
+            //Le bouton permet d'appeller la méthode pour aller à la manche suivante dans le game controller
+            try {
+                controller.giveUpManche();
+            }
+            catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        });
+        tentativePanel.add(giveUpButton);
     }
 
     public void addTentativeUpdateIndice(Tentative tentative, Indice[] indices)
     {
+        for (JLabel j: emptyCells)
+        {
+            j.putClientProperty("couleur", null);
+            j.setIcon(null);
+        }
         tentativeCount++;
         JPanel archiveTentative = new JPanel();
         archiveTentative.setLayout(new GridLayout(1, 2));

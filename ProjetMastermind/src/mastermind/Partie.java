@@ -23,11 +23,17 @@ public class Partie {
 
     public Manche createManche()
     {
-        notifyObserversInit(nbTentatives, nbPionsCombinaison);
-        mancheCount++;
-        mancheActuelle = new Manche(nbPionsDispo, nbPionsCombinaison, nbTentatives, listObservers);
-        mancheActuelle.genererCombinaisonAleatoire();
-        return mancheActuelle;
+        if(getManchesCount() < getNbManches())
+        {
+            notifyObserversInit(nbTentatives, nbPionsCombinaison);
+            mancheCount++;
+            mancheActuelle = new Manche(nbPionsDispo, nbPionsCombinaison, nbTentatives, listObservers);
+            mancheActuelle.genererCombinaisonAleatoire();
+            return mancheActuelle;
+        }
+
+
+        return null;
     }
 
     public void upgradeScore(int nb)
