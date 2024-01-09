@@ -9,7 +9,7 @@ public class ViewStart extends Views {
 
     public ViewStart(GameController controller)
     {
-        super("Mastermind");
+        super("Paramètres du Mastermind");
         this.controller = controller;
         setSize(400, 800);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
