@@ -12,10 +12,10 @@ public class GameController {
         this.plateau = plateau;
     }
 
-    public void createPartie(String nomJoueur, int nbManches, int nbPionsDispo, int nbPionsCombinaison, int nbTentatives)
+    public void createPartie(String nomJoueur, int nbManches, int nbPionsDispo, int nbPionsCombinaison, int nbTentatives, int typeIndice)
     {
         plateau.setJoueur(nomJoueur);
-        partie = plateau.createPartie(nbManches, nbPionsDispo, nbPionsCombinaison, nbTentatives);
+        partie = plateau.createPartie(nbManches, nbPionsDispo, nbPionsCombinaison, nbTentatives, typeIndice);
         gameStart();
     }
 
