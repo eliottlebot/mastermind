@@ -49,6 +49,10 @@ public abstract class Views extends JFrame {
                     component.setFont(new Font("Arial", Font.BOLD, 30));
                 }
             }
+            else if (component instanceof JRadioButton)
+            {
+                component.setFont(customFont.deriveFont(customFont.getSize() + 5));
+            }
             else if (component instanceof Container)
             {
                 setCustomFontForComponents((Container) component);
@@ -81,6 +85,10 @@ public abstract class Views extends JFrame {
                     component.setFont(new Font("Arial", Font.BOLD, 30));
                 }
             }
+            else if (component instanceof JRadioButton)
+            {
+                component.setFont(customFont.deriveFont(customFont.getSize() + 5));
+            }
             else if (component instanceof Container)
             {
                 setCustomFontForComponents((Container) component, Xfont);
@@ -111,6 +119,10 @@ public abstract class Views extends JFrame {
                 {
                     component.setFont(new Font("Arial", Font.BOLD, 30));
                 }
+            }
+            else if (component instanceof JRadioButton)
+            {
+                component.setFont(customFont.deriveFont(customFont.getSize() + 5));
             }
             else if (component instanceof Container)
             {

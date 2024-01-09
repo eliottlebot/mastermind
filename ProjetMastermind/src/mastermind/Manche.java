@@ -7,15 +7,18 @@ public class Manche {
     private int nbTentativesMax;
     private int tailleCombinaison;
     private int nbPionsDispo;
+    private int typeIndice;
     private List<Tentative> listTentatives = new ArrayList<>();
     private int score = 0;
     private List<MastermindObserver> listObservers;
     private HashMap<Couleurs, Integer> compteurCouleurs = new HashMap<Couleurs, Integer>();
 
 
-    public Manche(int nbPionsDispo, Integer tailleCombinaison, Integer nombreTentatives, List<MastermindObserver> obervers){
+    public Manche(int nbPionsDispo, Integer tailleCombinaison, Integer nombreTentatives, List<MastermindObserver> obervers, int typeIndice){
         this.nbPionsDispo = nbPionsDispo;
         this.tailleCombinaison = tailleCombinaison;
+        System.out.println("type d'indice : " + typeIndice);
+        this.typeIndice = typeIndice;
         combinaisonSecrete = new Combinaison(tailleCombinaison);
         nbTentativesMax = nombreTentatives;
         listObservers = obervers;

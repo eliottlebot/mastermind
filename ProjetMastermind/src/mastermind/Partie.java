@@ -5,19 +5,22 @@ public class Partie {
     private int nbPionsDispo;
     private int nbPionsCombinaison;
     private int nbTentatives;
+    private int typeIndice;
     private int mancheCount = 0;
     private int score = 0;
+
     private Manche mancheActuelle;
     private List<MastermindObserver> listObservers;
 
 
-    public Partie(List<MastermindObserver> observers, int nbManches, int nbPionsDispo, int nbPionsCombinaison, int nbTentatives)
+    public Partie(List<MastermindObserver> observers, int nbManches, int nbPionsDispo, int nbPionsCombinaison, int nbTentatives, int typeIndice)
     {
         listObservers = observers;
         this.nbManches = nbManches;
         this.nbPionsDispo = nbPionsDispo;
         this.nbPionsCombinaison = nbPionsCombinaison;
         this.nbTentatives = nbTentatives;
+        this.typeIndice = typeIndice;
         notifyObserversShowAvaibleColors();
     }
 
@@ -27,7 +30,7 @@ public class Partie {
         {
             notifyObserversInit(nbTentatives, nbPionsCombinaison);
             mancheCount++;
-            mancheActuelle = new Manche(nbPionsDispo, nbPionsCombinaison, nbTentatives, listObservers);
+            mancheActuelle = new Manche(nbPionsDispo, nbPionsCombinaison, nbTentatives, listObservers, typeIndice);
             mancheActuelle.genererCombinaisonAleatoire();
             return mancheActuelle;
         }
