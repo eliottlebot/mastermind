@@ -9,6 +9,9 @@ public abstract class Views extends JFrame {
     public Views(String nom)
     {
         super(nom);
+
+        ImageIcon img = new ImageIcon("assets/icone/mastermind.jpg");
+        super.setIconImage(img.getImage());
     }
 
     public Font loadCustomFont(int style, int size) {
