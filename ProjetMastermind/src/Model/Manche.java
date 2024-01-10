@@ -1,4 +1,4 @@
-package mastermind;
+package Model;
 
 import java.util.*;
 

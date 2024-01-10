@@ -1,14 +1,13 @@
-package mastermind;
+package View;
+import Controller.GameController;
+
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 
 public class ViewStart extends Views {
-    GameController controller;
-    JTextField[] textFields;
+    private GameController controller;
 
 
     public ViewStart(GameController controller)

@@ -1,4 +1,4 @@
-package mastermind;
+package View;
 
 import java.awt.*;
 import java.io.File;
