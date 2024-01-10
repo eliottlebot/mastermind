@@ -4,49 +4,90 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
+import javax.swing.plaf.metal.MetalBorders;
 
 public class ViewGame extends Views implements MastermindObserver {
     GameController controller;
     JPanel mainPanel = new JPanel();
     JPanel tentativePanel = new JPanel();
     JPanel avaibleColors = new JPanel();
+    JPanel title = new JPanel();
+    JLabel titre;
+    JScrollPane scrollPane;
 
     private JLabel selectedPion;
     private ImageIcon draggedIcon;
     private int nbPionsCombi;
     private int tentativeCount = 0;
     private int nbTentative;
+    private int width=1000;
+    private int length=800;
 
 
     private JLabel[] pions;
     private JLabel[] emptyCells;
 
-    public ViewGame(GameController controller)
-    {
+    public ViewGame(GameController controller) {
         super("Mastermind");
         this.controller = controller;
-        setSize(700, 900);
+        setSize(width, length);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setLayout(new BorderLayout());
-        mainPanel.setLayout(new GridLayout(8,1));
+
+        JPanel windowsPanel = new JPanel();
+        windowsPanel.setLayout(new BoxLayout(windowsPanel, BoxLayout.PAGE_AXIS));
 
 
-        this.add(mainPanel, BorderLayout.PAGE_START);//affichage des tentatives passées + indices
-        add(tentativePanel, BorderLayout.CENTER);//tentative actuelle
-        add(avaibleColors, BorderLayout.PAGE_END);//couleurs dispos
+        // Utilisation de BoxLayout pour mainPanel
+        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+        //Et d'un scrollPane pour la barre de défilement
+        scrollPane = new JScrollPane(mainPanel);
+
+        scrollPane.setPreferredSize(new Dimension(width, 500));
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+
+        //Utilisation d'un nouveau Layout pour afficher un titre en haut de la page
+
+        title.setLayout(new BorderLayout());
+        titre = new JLabel();
+        titre.setHorizontalAlignment(SwingConstants.CENTER);
+        titre.setFont(new Font("SansSerif", Font.BOLD, 40));
+        titre.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        title.add(titre, BorderLayout.PAGE_START);
+        title.add(scrollPane, BorderLayout.PAGE_END); // Affichage des tentatives passées + indices
+
+        windowsPanel.add(title, BorderLayout.PAGE_START);
+
+        // Création d'un box layout encapsulant les couleurs dispos et la tentative
+        JPanel actionsJoueur = new JPanel();
+        actionsJoueur.setLayout(new BoxLayout(actionsJoueur, BoxLayout.Y_AXIS));
+        actionsJoueur.add(tentativePanel); // Tentative actuelle
+        actionsJoueur.add(avaibleColors); // Couleurs dispos
+        windowsPanel.add(actionsJoueur, BorderLayout.PAGE_END);
+
+        windowsPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        add(windowsPanel);
         setVisible(false);
     }
 
-    public void init(int nbTentatives, int nbPionsCombinaison)
+    public void init(int nbTentatives, int nbPionsCombinaison, Integer typeIndice)
     {
+        //Je set le numéro de la manche.
+        titre.setText("Manche N°"+(controller.getMancheActuelle()+1));
+
         setVisible(false);
         tentativeCount = 0;
         this.nbTentative = nbTentatives;
         nbPionsCombi = nbPionsCombinaison;
-        mainPanel.setLayout(new GridLayout(nbTentatives, 1));
+
         tentativePanel.setLayout(new GridLayout(1, nbPionsCombinaison + 3));
+        tentativePanel.setPreferredSize(new Dimension(width, 70));
 
 
         for (int i = 0; i < nbTentatives; i++)
@@ -65,21 +106,31 @@ public class ViewGame extends Views implements MastermindObserver {
             fillIndice.setBorder(new LineBorder(Color.BLACK));
             fillIndice.setLayout(new GridLayout(1, nbPionsCombinaison));
 
-            for(int j = 0; j < nbPionsCombinaison; j++)
-            {
+            for (int j = 0; j < nbPionsCombinaison; j++) {
                 JLabel jl = new JLabel(new ImageIcon("assets/pions/BLANC.png"));
                 fillTenta.add(jl);
+            }
 
-                JLabel jl2 = new JLabel(new ImageIcon("assets/indices/VIDE.png"));
-                fillIndice.add(jl2);
+            //En fonction du mode d'affichage des indices, on met soit des ronds vides, soit on affiche rien
+            if(typeIndice<2) {
+                for (int j = 0; j < nbPionsCombinaison; j++) {
+                    JLabel jl2 = new JLabel(new ImageIcon("assets/indices/VIDE.png"));
+                    fillIndice.add(jl2);
+                }
             }
             fillPnl.add(fillTenta);
             fillPnl.add(fillIndice);
+            fillPnl.setPreferredSize(new Dimension(width-60, 70));
 
 
             mainPanel.add(fillPnl);
         }
         setVisible(true);
+
+        // Positionne la barre de défilement en bas
+        JScrollBar verticalScrollBar = scrollPane.getVerticalScrollBar();
+        verticalScrollBar.setValue(verticalScrollBar.getMaximum());
+        verticalScrollBar.setUI(new CustomScrollBarUI());
     }
 
 
@@ -88,6 +139,7 @@ public class ViewGame extends Views implements MastermindObserver {
     {
 
         avaibleColors.setLayout(new GridLayout(1, couleursDispo.length));
+        avaibleColors.setPreferredSize(new Dimension(width, 70));
 
         pions = new JLabel[couleursDispo.length];
         for (int i = 0; i < pions.length; i++) {
@@ -188,7 +240,7 @@ public class ViewGame extends Views implements MastermindObserver {
             }
         }
 
-        loadCustomFont(Font.TRUETYPE_FONT, 20);
+        loadCustomFont(Font.TRUETYPE_FONT, 15);
         //System.out.println("Appel changement police... : " + ((JButton)container[0]).getText() + " | " + ((JButton)container[1]).getText() + " | " +((JButton)container[2]).getText());
         setCustomFontForComponents(container);
 
@@ -197,7 +249,7 @@ public class ViewGame extends Views implements MastermindObserver {
 
     }
 
-    public void addTentativeUpdateIndice(Tentative tentative, Indice[] indices)
+    public void addTentativeUpdateIndice(Tentative tentative, Indice[] indices, Integer typeIndice)
     {
         for (JLabel j: emptyCells)
         {
@@ -225,18 +277,58 @@ public class ViewGame extends Views implements MastermindObserver {
         //On ajoute la combinaison de couleurs au panel de la tentative
         archiveTentative.add(tentativePanel);
 
-        for(int i = 0; i < indices.length; i++)
-        {
-            JLabel j = new JLabel();
-            switch (indices[i])
-            {
-                case NOIR -> j.setIcon(new ImageIcon("assets/indices/NOIR.png"));
-                case BLANC -> j.setIcon(new ImageIcon("assets/indices/BLANC.png"));
-                case VIDE -> j.setIcon(new ImageIcon("assets/indices/VIDE.png"));
+        if(typeIndice==0){
+            for (Indice index : indices) {
+                JLabel j = new JLabel();
+                switch (index) {
+                    case NOIR -> j.setIcon(new ImageIcon("assets/indices/NOIR.png"));
+                    case BLANC -> j.setIcon(new ImageIcon("assets/indices/BLANC.png"));
+                    case VIDE -> j.setIcon(new ImageIcon("assets/indices/VIDE.png"));
+                }
+                indicePanel.add(j);
             }
-
-            indicePanel.add(j);
         }
+        else if(typeIndice==1){
+            int nbNoirs=0;
+            int nbBlancs=0;
+            for (Indice index : indices) {
+                switch (index) {
+                    case NOIR -> nbNoirs++;
+                    case BLANC -> nbBlancs++;
+                }
+            }
+            for(int i =0; i<nbNoirs; i++){
+                JLabel j = new JLabel();
+                j.setIcon(new ImageIcon("assets/indices/NOIR.png"));
+                indicePanel.add(j);
+            }
+            for(int i =0; i<nbBlancs; i++){
+                JLabel j = new JLabel();
+                j.setIcon(new ImageIcon("assets/indices/BLANC.png"));
+                indicePanel.add(j);
+            }
+            //On rempli le reste avec des indices "vides"
+            for(int i = 0; i< indices.length - (nbNoirs+nbBlancs); i++){
+                JLabel j = new JLabel();
+                j.setIcon(new ImageIcon("assets/indices/VIDE.png"));
+                indicePanel.add(j);
+            }
+        }
+        else if(typeIndice==2){
+            int nbNoirs=0;
+            int nbBlancs=0;
+            for (Indice index : indices) {
+                switch (index) {
+                    case NOIR -> nbNoirs++;
+                    case BLANC -> nbBlancs++;
+                }
+            }
+            JLabel LabelNoirs = new JLabel("Pions bien placés : "+ nbNoirs);
+            JLabel LabelBlancs = new JLabel("Pions dans la combinaison : "+ nbBlancs);
+            indicePanel.add(LabelNoirs);
+            indicePanel.add(LabelBlancs);
+        }
+
         //On ajoute le tableau d'indices au panel de la tentative
         archiveTentative.add(indicePanel);
 

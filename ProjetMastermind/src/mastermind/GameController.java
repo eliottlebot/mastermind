@@ -56,4 +56,7 @@ public class GameController {
         mancheActuelle.giveUp();
         gameStart();
     }
+    public int getMancheActuelle(){
+        return this.partie.getManchesCount();
+    }
 }
