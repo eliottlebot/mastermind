@@ -1,6 +1,10 @@
 package mastermind;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 
 public class ViewStart extends Views {
     GameController controller;
@@ -57,12 +61,26 @@ public class ViewStart extends Views {
                 new JTextField("10")
         };
 
+        int i = 0;
         for (JTextField textField : textFields) {
+            final int index = i;
+            String defaultValue = textField.getText();
+            textField.addFocusListener(new FocusAdapter() {
+                @Override
+                public void focusLost(FocusEvent e) {
+                    JTextField textField = (JTextField) e.getSource(); // Récupère le champ de texte ayant perdu le focus
+                    String text = textField.getText();
+                    if (!isValidNumber(text, index)) {
+                        textField.setText(defaultValue);
+                    }
+                }
+            });
             textField.setColumns(10);
             gbc.gridx = 1; // Colonne 1 pour les champs de texte
             gbc.fill = GridBagConstraints.HORIZONTAL; // Remplissage horizontal pour les champs de texte
             rightPanel.add(textField, gbc);
             gbc.gridx = 0; // Réinitialiser à la colonne 0 pour les labels suivants
+            i++;
         }
 
         JRadioButton rdbFacile = new JRadioButton("Facile");
@@ -127,6 +145,58 @@ public class ViewStart extends Views {
         this.pack();
     }
 
+    private boolean isValidNumber(String text, int typeField) {
+        // Vérifier si le texte est un nombre
+        try {
+            if(typeField == 0)
+            {
+                return true;
+            }
+            int value = Integer.parseInt(text);
+            switch (typeField)
+            {
+                case 1:
+                    if(value > 0 && value < 6)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                case 2:
+                    if(value > 3 && value < 9)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                case 3:
+                    if(value > 1 && value < 7)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                case 4:
+                    if(value > 1 && value < 13)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+            }
+            return false;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
 
 
 }

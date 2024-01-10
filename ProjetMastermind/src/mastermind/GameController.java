@@ -29,7 +29,7 @@ public class GameController {
         }
         else
         {
-            viewEnd.end(plateau.getNomJoueur(), partie.getScore());
+            viewEnd.end(plateau.getNomJoueur(), partie.getScore(), partie.getTabScores());
         }
     }
 
@@ -44,8 +44,10 @@ public class GameController {
         }
         tentativeActuelle.setCombinaisonCouleur(tentative);
         mancheActuelle.addTentative(tentativeActuelle);
+        System.out.println("test");
         if(mancheActuelle.verifierCombinaisonIndices())//manche terminée
         {
+            partie.updateScore();
             gameStart();
         }
     }
@@ -53,6 +55,7 @@ public class GameController {
 
     public void giveUpManche()
     {
+        partie.updateScore();
         mancheActuelle.giveUp();
         gameStart();
     }

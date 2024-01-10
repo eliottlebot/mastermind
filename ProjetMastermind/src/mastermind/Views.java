@@ -133,4 +133,36 @@ public abstract class Views extends JFrame {
             }
         }
     }
+
+    public void setCustomFontForComponent(Component component, Font Xfont)
+    {
+        if (component instanceof JLabel)
+        {
+            component.setFont(Xfont);
+        }
+        else if (component instanceof JButton)
+        {
+            component.setFont(Xfont.deriveFont(Xfont.getSize() + 15));
+        }
+        else if (component instanceof JTextField)
+        {
+            String text = ((JTextField) component).getText();
+            if (!text.matches(".*\\d.*"))
+            {
+                component.setFont(Xfont.deriveFont(Xfont.getSize() + 10));
+            }
+            else
+            {
+                component.setFont(new Font("Arial", Font.BOLD, 30));
+            }
+        }
+        else if (component instanceof JRadioButton)
+        {
+            component.setFont(customFont.deriveFont(customFont.getSize() + 5));
+        }
+        else if (component instanceof Container)
+        {
+            setCustomFontForComponents((Container) component, Xfont);
+        }
+    }
 }
