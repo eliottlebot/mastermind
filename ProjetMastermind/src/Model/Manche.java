@@ -155,6 +155,11 @@ public class Manche {
         notifyOberserversNewManche(false, listTentatives.size());
     }
 
+    public int getNbTenta()
+    {
+        return listTentatives.size();
+    }
+
 
     private void notifyObserversStartTentative(int nbPionsCombi)
     {

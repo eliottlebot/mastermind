@@ -33,7 +33,7 @@ public class GameController {
         }
         else
         {
-            viewEnd.end(plateau.getNomJoueur(), partie.getScore(), partie.getTabScores());
+            viewEnd.end(plateau.getNomJoueur(), partie.getScore(), partie.getTabScores(), partie.getTabTenta());
         }
     }
 
