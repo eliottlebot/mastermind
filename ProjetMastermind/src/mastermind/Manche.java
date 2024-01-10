@@ -17,7 +17,6 @@ public class Manche {
     public Manche(int nbPionsDispo, Integer tailleCombinaison, Integer nombreTentatives, List<MastermindObserver> obervers, int typeIndice){
         this.nbPionsDispo = nbPionsDispo;
         this.tailleCombinaison = tailleCombinaison;
-        System.out.println("type d'indice : " + typeIndice);
         this.typeIndice = typeIndice;
         combinaisonSecrete = new Combinaison(tailleCombinaison);
         nbTentativesMax = nombreTentatives;
@@ -71,6 +70,12 @@ public class Manche {
         //Nouveau compteur de couleurs qui permettra de savoir si toutes les occurences d'une couleur ont été trouvées
         HashMap<Couleurs, Integer> compteurTemp = new HashMap<Couleurs, Integer>();
         initCompteur(compteurTemp);
+        int nbPionsBienPlaces = 0;
+
+        if(typeIndice == 1)
+        {
+            score += 4;
+        }
 
         //Premier tour de boucle parcourt la liste des couleurs, pour placer des poins noirs au bon endroit
         for(int i =0; i<tailleCombinaison; i++) {
@@ -80,8 +85,11 @@ public class Manche {
                 //On ajoute l'indice noir dans le tableau d'indices, et on incrémente la valeur du nb d'occurences
                 tentativeActuelle.setIndicesCouleurs(Indice.NOIR, i);
                 compteurTemp.put(couleurTentative, compteurTemp.get(couleurTentative) + 1);
+                nbPionsBienPlaces += 1;
             }
         }
+
+        score += 3*nbPionsBienPlaces;
 
         //Deuxieme tour de boucle qui vérifie d'abord que l'indice à l'index donné nest pas déja noir, puis voit si elle met un indice blanc ou vide, en fonction du compteur de couleurs
         for(int i =0; i<tailleCombinaison; i++){
@@ -94,6 +102,7 @@ public class Manche {
                         tentativeActuelle.setIndicesCouleurs(Indice.VIDE, i);
                     } else {
                         tentativeActuelle.setIndicesCouleurs(Indice.BLANC, i);
+                        score++;
                     }
                 }
                 else{
@@ -103,20 +112,22 @@ public class Manche {
             }
 
         }
-        System.out.println(Arrays.toString(tentativeActuelle.getIndices()));
+        //System.out.println(Arrays.toString(tentativeActuelle.getIndices()));
 
         notifyOberserversAddTentativeUpdateIndice(tentativeActuelle, tentativeActuelle.getIndices());
 
-        System.out.println("fini : " + finished);
+        //System.out.println("fini : " + finished);
 
         if(finished) {
-            notifyOberserversNewManche(true);
+            notifyOberserversNewManche(true, listTentatives.size());
         }
-        else if((listTentatives.size() - 1) == nbTentativesMax)        {
-            notifyOberserversNewManche(false);
+        else if((listTentatives.size()) == nbTentativesMax){
+            notifyOberserversNewManche(false, listTentatives.size());
         }
 
-        return finished;
+        //System.out.println("listTentatives.size() - 1 : " + (listTentatives.size() - 1) + " == " + nbTentativesMax);
+
+        return finished||(listTentatives.size()) == nbTentativesMax;
     }
     public Boolean couleurDansCombinaison(Combinaison combinaisonSecrete, Couleurs couleur) {
         for (Couleurs couleursSec : combinaisonSecrete.getCombinaison()) {
@@ -133,12 +144,6 @@ public class Manche {
         }
     }
 
-
-    public void upgradeScore()
-    {
-        score++;
-    }
-
     public int getScore()
     {
         return this.score;
@@ -147,7 +152,7 @@ public class Manche {
 
     public void giveUp()
     {
-        notifyOberserversNewManche(false);
+        notifyOberserversNewManche(false, listTentatives.size());
     }
 
 
@@ -158,16 +163,16 @@ public class Manche {
         }
     }
 
-    private void notifyOberserversNewManche(boolean isWin)
+    private void notifyOberserversNewManche(boolean isWin, int nbTentatives)
     {
         for (MastermindObserver observer: listObservers) {
-            observer.newManche(isWin);
+            observer.newManche(isWin, nbTentatives);
         }
     }
     private void notifyOberserversAddTentativeUpdateIndice(Tentative tentative, Indice[] indices)
     {
         for (MastermindObserver observer: listObservers) {
-            observer.addTentativeUpdateIndice(tentative, indices, typeIndice);
+            observer.addTentativeUpdateIndice(tentative, indices, typeIndice, getScore());
         }
     }
 

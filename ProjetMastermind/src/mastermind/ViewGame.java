@@ -1,6 +1,7 @@
 package mastermind;
 
 import javax.swing.*;
+import java.util.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
@@ -15,8 +16,8 @@ public class ViewGame extends Views implements MastermindObserver {
     JPanel mainPanel = new JPanel();
     JPanel tentativePanel = new JPanel();
     JPanel avaibleColors = new JPanel();
-    JPanel title = new JPanel();
-    JLabel titre;
+    JLabel lblNumManche;
+    JLabel lblScore;
     JScrollPane scrollPane;
 
     private JLabel selectedPion;
@@ -53,15 +54,55 @@ public class ViewGame extends Views implements MastermindObserver {
 
         //Utilisation d'un nouveau Layout pour afficher un titre en haut de la page
 
-        title.setLayout(new BorderLayout());
-        titre = new JLabel();
+        JPanel pnlInfos = new JPanel(new BorderLayout());
+        JPanel title = new JPanel(new FlowLayout());
+        title.setBorder(BorderFactory.createEmptyBorder(20, 150, 0, 0));
+        title.setBackground(Color.BLUE);
+        JLabel titre = new JLabel("Manche ");
         titre.setHorizontalAlignment(SwingConstants.CENTER);
-        titre.setFont(new Font("SansSerif", Font.BOLD, 40));
-        titre.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        title.add(titre, BorderLayout.PAGE_START);
-        title.add(scrollPane, BorderLayout.PAGE_END); // Affichage des tentatives passées + indices
+        titre.setForeground(Color.WHITE);
 
-        windowsPanel.add(title, BorderLayout.PAGE_START);
+        Font customFont = loadCustomFont(Font.TRUETYPE_FONT, 40);
+        setCustomFontForComponent(titre, customFont);
+        title.add(titre);
+
+
+        lblNumManche = new JLabel();
+        lblNumManche.setFont(new Font("Dialog", Font.BOLD, 40));
+        lblNumManche.setForeground(Color.WHITE);
+        Border paddingBorder = BorderFactory.createEmptyBorder(0, 0, 10, 0);
+        lblNumManche.setBorder(paddingBorder);
+        title.add(lblNumManche);
+
+        pnlInfos.add(title, BorderLayout.CENTER);
+
+
+        JPanel pnlScore = new JPanel(new FlowLayout());
+        pnlScore.setBorder(BorderFactory.createEmptyBorder(20, 0, 0, 20));
+        pnlScore.setBackground(Color.BLUE);
+        JLabel lblScoreTitre = new JLabel("Score ");
+        lblScoreTitre.setHorizontalAlignment(SwingConstants.CENTER);
+        lblScoreTitre.setForeground(Color.WHITE);
+
+        Font customFont2 = loadCustomFont(Font.TRUETYPE_FONT, 30);
+        setCustomFontForComponent(lblScoreTitre, customFont2);
+        pnlScore.add(lblScoreTitre);
+
+
+        lblScore = new JLabel("0");
+        lblScore.setFont(new Font("Dialog", Font.BOLD, 30));
+        lblScore.setForeground(Color.WHITE);
+        lblScore.setBorder(paddingBorder);
+        pnlScore.add(lblScore);
+
+        pnlInfos.add(pnlScore, BorderLayout.LINE_END);
+
+
+
+        windowsPanel.add(pnlInfos, BorderLayout.PAGE_START);
+
+
+        windowsPanel.add(scrollPane, BorderLayout.PAGE_START); // Affichage des tentatives passées + indices
 
         // Création d'un box layout encapsulant les couleurs dispos et la tentative
         JPanel actionsJoueur = new JPanel();
@@ -76,10 +117,11 @@ public class ViewGame extends Views implements MastermindObserver {
         setVisible(false);
     }
 
-    public void init(int nbTentatives, int nbPionsCombinaison, Integer typeIndice)
+    public void init(int nbTentatives, int nbPionsCombinaison, Integer typeIndice, int numManche)
     {
+        lblScore.setText("0");
         //Je set le numéro de la manche.
-        titre.setText("Manche N°"+(controller.getMancheActuelle()+1));
+        lblNumManche.setText(String.valueOf(numManche + 1));
 
         setVisible(false);
         tentativeCount = 0;
@@ -249,8 +291,9 @@ public class ViewGame extends Views implements MastermindObserver {
 
     }
 
-    public void addTentativeUpdateIndice(Tentative tentative, Indice[] indices, Integer typeIndice)
+    public void addTentativeUpdateIndice(Tentative tentative, Indice[] indices, Integer typeIndice, int score)
     {
+        lblScore.setText(String.valueOf(score));
         for (JLabel j: emptyCells)
         {
             j.putClientProperty("couleur", null);
@@ -337,12 +380,12 @@ public class ViewGame extends Views implements MastermindObserver {
     }
 
 
-    public void newManche(boolean isWin)
+    public void newManche(boolean isWin, int nbTentatives)
     {
         mainPanel.removeAll();
         tentativePanel.removeAll();
         JLabel messageWin = new JLabel();
-        messageWin.setFont(loadCustomFont(Font.TRUETYPE_FONT, 20));
+        //messageWin.setFont(loadCustomFont(Font.TRUETYPE_FONT, 30));
 
         if(isWin)
         {
@@ -352,6 +395,8 @@ public class ViewGame extends Views implements MastermindObserver {
         {
             messageWin.setText("Perdu");
         }
+
+        messageWin.setText(messageWin.getText() + " avec " + nbTentatives + " tentatives");
 
 
         ImageIcon icon = new ImageIcon("assets/icone/mastermind.jpg");
