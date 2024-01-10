@@ -1,4 +1,8 @@
-package mastermind;
+import Controller.GameController;
+import Model.Plateau;
+import View.ViewEnd;
+import View.ViewGame;
+import View.ViewStart;
 
 public class Main {
     public static void main(String[] args) {

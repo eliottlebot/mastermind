@@ -1,11 +1,10 @@
-package mastermind;
+package Model;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Plateau {
     private String nomJoueur;
-    private int meilleurScore;
     private List<MastermindObserver> listObservers = new ArrayList<>();
 
 

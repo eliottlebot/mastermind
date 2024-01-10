@@ -29,6 +29,20 @@ NOIR
 BLANC
 
 }
+Class mastermind.CustomScrollBarUI{
++ <<create>> CustomScrollBarUI()
+{read only} - arcSize: Integer
+# paintThumb(g: Graphics, c: JComponent, thumbBounds: Rectangle)
+# paintTrack(g: Graphics, c: JComponent, trackBounds: Rectangle)
+# getMinimumThumbSize(): Dimension
+# getMaximumThumbSize(): Dimension
+# createDecreaseButton(orientation: Integer): JButton
+# createIncreaseButton(orientation: Integer): JButton
+
+}
+
+
+
 Class mastermind.GameController{
 + <<create>> GameController(plateau: Plateau, viewEnd: ViewEnd)
 
@@ -36,7 +50,7 @@ Class mastermind.GameController{
 
 
 
-+ createPartie(nomJoueur: String, nbManches: Integer, nbPionsDispo: Integer, nbPionsCombinaison: Integer, nbTentatives: Integer)
++ createPartie(nomJoueur: String, nbManches: Integer, nbPionsDispo: Integer, nbPionsCombinaison: Integer, nbTentatives: Integer, typeIndice: Integer)
 + gameStart()
 + validerTentative(tentative: Combinaison)
 + giveUpManche()
@@ -66,11 +80,12 @@ Class mastermind.Main{
 
 
 Class mastermind.Manche{
-+ <<create>> Manche(nbPionsDispo: Integer, tailleCombinaison: Integer, nombreTentatives: Integer, obervers: MastermindObserver[*])
++ <<create>> Manche(nbPionsDispo: Integer, tailleCombinaison: Integer, nombreTentatives: Integer, obervers: MastermindObserver[*], typeIndice: Integer)
 
 - nbTentativesMax: Integer
 - tailleCombinaison: Integer
 - nbPionsDispo: Integer
+- typeIndice: Integer
 
 - score: Integer
 
@@ -81,11 +96,10 @@ Class mastermind.Manche{
 + verifierCombinaisonIndices(): Boolean
 + couleurDansCombinaison(combinaisonSecrete: Combinaison, couleur: Couleurs): Boolean
 + initCompteur(compteur: Couleurs[*])
-+ upgradeScore()
 + getScore(): Integer
 + giveUp()
 - notifyObserversStartTentative(nbPionsCombi: Integer)
-- notifyOberserversNewManche(isWin: Boolean)
+- notifyOberserversNewManche(isWin: Boolean, nbTentatives: Integer)
 - notifyOberserversAddTentativeUpdateIndice(tentative: Tentative, indices: void)
 
 }
@@ -101,30 +115,33 @@ mastermind.Manche --> mastermind.Tentative: notifyOberserversAddTentativeUpdateI
 
 
 Interface mastermind.MastermindObserver<<interface>> {
-{abstract} + init(nbTentatives: Integer, nbPionsCombinaison: Integer)
+{abstract} + init(nbTentatives: Integer, nbPionsCombinaison: Integer, typeIndice: Integer, numManche: Integer)
 {abstract} + showAvaibleColors(couleursDispo: void)
 {abstract} + startTentative(nbPionsCombi: Integer)
-{abstract} + addTentativeUpdateIndice(tentative: Tentative, indices: void)
-{abstract} + newManche(isWin: Boolean)
+{abstract} + addTentativeUpdateIndice(tentative: Tentative, indices: void, typeIndice: Integer, score: Integer)
+{abstract} + newManche(isWin: Boolean, nbTentatives: Integer)
 
 }
 
 Class mastermind.Partie{
-+ <<create>> Partie(observers: MastermindObserver[*], nbManches: Integer, nbPionsDispo: Integer, nbPionsCombinaison: Integer, nbTentatives: Integer)
++ <<create>> Partie(observers: MastermindObserver[*], nbManches: Integer, nbPionsDispo: Integer, nbPionsCombinaison: Integer, nbTentatives: Integer, typeIndice: Integer)
 - nbManches: Integer
 - nbPionsDispo: Integer
 - nbPionsCombinaison: Integer
 - nbTentatives: Integer
+- typeIndice: Integer
 - mancheCount: Integer
 - score: Integer
+- tabScores: void
 
 
 + createManche(): Manche
-+ upgradeScore(nb: Integer)
++ updateScore()
 + getScore(): Integer
 - notifyObserversShowAvaibleColors()
 + getManchesCount(): Integer
 + getNbManches(): Integer
++ getTabScores(): void
 - notifyObserversInit(nbTentatives: Integer, nbPionsCombi: Integer)
 
 }
@@ -136,9 +153,8 @@ mastermind.Partie o--- "listObservers"mastermind.MastermindObserver
 Class mastermind.Plateau{
 + <<create>> Plateau()
 
-- meilleurScore: Integer
 
-+ createPartie(nbManches: Integer, nbPionsDispo: Integer, nbPionsCombinaison: Integer, nbTentatives: Integer): Partie
++ createPartie(nbManches: Integer, nbPionsDispo: Integer, nbPionsCombinaison: Integer, nbTentatives: Integer, typeIndice: Integer): Partie
 + setJoueur(nom: String)
 + addObserver(mastermindObserver: MastermindObserver)
 + getNomJoueur(): String
@@ -168,7 +184,8 @@ mastermind.Tentative --> mastermind.Indice: setIndicesCouleurs
 
 Class mastermind.ViewEnd{
 + <<create>> ViewEnd()
-+ end(nomJoueur: String, score: Integer)
++ end(nomJoueur: String, score: Integer, tabScore: void)
+- animateBarVertical(barre: JProgressBar, valeurFinale: Integer)
 
 }
 
@@ -182,16 +199,21 @@ Class mastermind.ViewGame{
 
 
 
+
+
+
 - nbPionsCombi: Integer
 - tentativeCount: Integer
 - nbTentative: Integer
+- width: Integer
+- length: Integer
 - pions: void
 - emptyCells: void
-+ init(nbTentatives: Integer, nbPionsCombinaison: Integer)
++ init(nbTentatives: Integer, nbPionsCombinaison: Integer, typeIndice: Integer, numManche: Integer)
 + showAvaibleColors(couleursDispo: void)
 + startTentative(nbPionsCombi: Integer)
-+ addTentativeUpdateIndice(tentative: Tentative, indices: void)
-+ newManche(isWin: Boolean)
++ addTentativeUpdateIndice(tentative: Tentative, indices: void, typeIndice: Integer, score: Integer)
++ newManche(isWin: Boolean, nbTentatives: Integer)
 
 }
 mastermind.ViewGame ..|> mastermind.MastermindObserver
@@ -207,6 +229,7 @@ Class mastermind.Views{
 + setCustomFontForComponents(container: Container)
 + setCustomFontForComponents(container: Container, Xfont: Font)
 + setCustomFontForComponents(components: void)
++ setCustomFontForComponent(component: Component, Xfont: Font)
 
 }
 
@@ -215,8 +238,8 @@ Class mastermind.Views{
 Class mastermind.ViewStart{
 + <<create>> ViewStart(controller: GameController)
 
-textFields: void
 + setParameters()
+- isValidNumber(text: String, typeField: Integer): Boolean
 
 }
 
@@ -225,3 +248,4 @@ mastermind.ViewStart o-- "controller"mastermind.GameController
 mastermind.ViewStart ---|> mastermind.Views
 
 @enduml
+
