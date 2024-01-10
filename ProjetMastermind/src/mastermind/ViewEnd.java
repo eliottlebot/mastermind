@@ -1,6 +1,8 @@
 package mastermind;
 
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
 
@@ -15,6 +17,8 @@ public class ViewEnd extends Views {
     }
     public void end(String nomJoueur, int score, int[] tabScore)
     {
+        this.getContentPane().setBackground(new Color(255, 205, 178));
+
         JPanel mainPnl = new JPanel();
         mainPnl.setLayout(new BoxLayout(mainPnl, BoxLayout.Y_AXIS));
 
@@ -23,6 +27,7 @@ public class ViewEnd extends Views {
         mainPnl.setBackground(Color.BLUE);
         lblTitre.setHorizontalAlignment(SwingConstants.CENTER);
         lblTitre.setText("Fin de partie - " + nomJoueur);
+        lblTitre.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
         Font customFont = loadCustomFont(Font.TRUETYPE_FONT, 40);
         lblTitre.setFont(customFont);
 
