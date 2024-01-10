@@ -12,7 +12,7 @@ public class ViewEnd extends Views {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setVisible(false);
     }
-    public void end(String nomJoueur, int score, int[] tabScore)
+    public void end(String nomJoueur, int score, int[] tabScore, int[] tabTenta)
     {
         JPanel mainPnl = new JPanel();
         mainPnl.setLayout(new BoxLayout(mainPnl, BoxLayout.Y_AXIS));
@@ -74,6 +74,37 @@ public class ViewEnd extends Views {
 
         mainPnl.add(diagBarres);
 
+        JLabel lblNbTenta = new JLabel();
+        lblScoreChaqueManche.setText("Nombre de tentatives pour chaque manche");
+        lblScoreChaqueManche.setFont(customFont2);
+        lblScoreChaqueManche.setForeground(Color.WHITE);
+        mainPnl.add(lblScoreChaqueManche);
+
+
+        JPanel diagBarres2 = new JPanel(new FlowLayout());
+
+        for (int i = 0; i < tabScore.length; i++) {
+            JPanel pnlBarre = new JPanel(new BorderLayout());
+            JProgressBar barre = new JProgressBar(JProgressBar.VERTICAL, 0, 10); // Orientation verticale et limites min et max
+            barre.setForeground(Color.BLUE);
+            barre.setBorderPainted(false);
+            barre.setPreferredSize(new Dimension(80, 150)); // Définit la largeur et la hauteur de chaque barre
+            barre.setValue(0); // Valeur de départ à zéro
+
+            JLabel lblBarre = new JLabel(String.valueOf(tabTenta[i]));
+            lblBarre.setFont(new Font("Arial", Font.BOLD, 20));
+            lblBarre.setHorizontalAlignment(SwingConstants.CENTER);
+            lblBarre.setForeground(Color.BLUE);
+
+            pnlBarre.add(barre, BorderLayout.CENTER);
+            pnlBarre.add(lblBarre, BorderLayout.PAGE_END);
+            diagBarres2.add(pnlBarre);
+
+            animateBarVertical(barre, tabTenta[i]); // Anime chaque barre avec la valeur correspondante dans tabScore
+        }
+
+        mainPnl.add(diagBarres2);
+
         this.add(mainPnl);
 
 
@@ -94,7 +125,8 @@ public class ViewEnd extends Views {
         setVisible(true);
     }
 
-    private void animateBarVertical(JProgressBar barre, int valeurFinale) {
+    private void animateBarVertical(JProgressBar barre, int valeurFinale)
+    {
         int delay = 50; // Délai entre les mises à jour de la barre (en millisecondes)
         int step = 1; // Pas d'incrément pour la progression
 

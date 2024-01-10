@@ -9,6 +9,7 @@ public class Partie {
     private int mancheCount = 0;
     private int score = 0;
     private int[] tabScores;
+    private int[] tabTenta;
     private Manche mancheActuelle;
     private List<MastermindObserver> listObservers;
 
@@ -22,6 +23,7 @@ public class Partie {
         this.nbTentatives = nbTentatives;
         this.typeIndice = typeIndice;
         tabScores = new int[nbManches];
+        tabTenta = new int[nbManches];
         notifyObserversShowAvaibleColors();
     }
 
@@ -45,6 +47,10 @@ public class Partie {
         int nb = mancheActuelle.getScore();
         tabScores[mancheCount-1] = nb;
         score += nb;
+
+        nb = mancheActuelle.getNbTenta();
+        tabTenta[mancheCount-1] = nb;
+
     }
 
     public int getScore()
@@ -79,6 +85,11 @@ public class Partie {
     public int[] getTabScores()
     {
         return this.tabScores;
+    }
+
+    public int[] getTabTenta()
+    {
+        return this.tabTenta;
     }
 
     private void notifyObserversInit(int nbTentatives, int nbPionsCombi)
