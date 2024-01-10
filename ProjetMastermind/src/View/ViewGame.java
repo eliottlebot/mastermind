@@ -25,13 +25,19 @@ public class ViewGame extends Views implements MastermindObserver {
     private int nbTentative;
     private int width=1000;
     private int length=800;
-
-
+    Color couleurTexte = new Color(241, 250, 238);
+    Color couleurFond = new Color(69, 123, 157);
+    Color couleurFondFonce = new Color(29, 53, 87);
+    Color couleurFondClaire = new Color(168, 218, 220);
     private JLabel[] pions;
     private JLabel[] emptyCells;
 
+
     public ViewGame(GameController controller) {
+
         super("Mastermind");
+
+        getContentPane().setBackground(couleurFondFonce);
         this.controller = controller;
         setSize(width, length);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -39,12 +45,14 @@ public class ViewGame extends Views implements MastermindObserver {
 
         JPanel windowsPanel = new JPanel();
         windowsPanel.setLayout(new BoxLayout(windowsPanel, BoxLayout.PAGE_AXIS));
+        windowsPanel.setBackground(couleurFondFonce);
 
 
         // Utilisation de BoxLayout pour mainPanel
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
         //Et d'un scrollPane pour la barre de défilement
         scrollPane = new JScrollPane(mainPanel);
+        scrollPane.setOpaque(false);
 
         scrollPane.setPreferredSize(new Dimension(width, 500));
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
@@ -55,10 +63,10 @@ public class ViewGame extends Views implements MastermindObserver {
         JPanel pnlInfos = new JPanel(new BorderLayout());
         JPanel title = new JPanel(new FlowLayout());
         title.setBorder(BorderFactory.createEmptyBorder(20, 150, 0, 0));
-        title.setBackground(Color.BLUE);
+        title.setBackground(couleurFondFonce);
         JLabel titre = new JLabel("Manche ");
         titre.setHorizontalAlignment(SwingConstants.CENTER);
-        titre.setForeground(Color.WHITE);
+        titre.setForeground(couleurTexte);
 
         Font customFont = loadCustomFont(Font.TRUETYPE_FONT, 40);
         setCustomFontForComponent(titre, customFont);
@@ -67,7 +75,7 @@ public class ViewGame extends Views implements MastermindObserver {
 
         lblNumManche = new JLabel();
         lblNumManche.setFont(new Font("Dialog", Font.BOLD, 40));
-        lblNumManche.setForeground(Color.WHITE);
+        lblNumManche.setForeground(couleurTexte);
         Border paddingBorder = BorderFactory.createEmptyBorder(0, 0, 10, 0);
         lblNumManche.setBorder(paddingBorder);
         title.add(lblNumManche);
@@ -77,10 +85,10 @@ public class ViewGame extends Views implements MastermindObserver {
 
         JPanel pnlScore = new JPanel(new FlowLayout());
         pnlScore.setBorder(BorderFactory.createEmptyBorder(20, 0, 0, 20));
-        pnlScore.setBackground(Color.BLUE);
+        pnlScore.setBackground(couleurFondFonce);
         JLabel lblScoreTitre = new JLabel("Score ");
         lblScoreTitre.setHorizontalAlignment(SwingConstants.CENTER);
-        lblScoreTitre.setForeground(Color.WHITE);
+        lblScoreTitre.setForeground(couleurTexte);
 
         Font customFont2 = loadCustomFont(Font.TRUETYPE_FONT, 30);
         setCustomFontForComponent(lblScoreTitre, customFont2);
@@ -89,7 +97,7 @@ public class ViewGame extends Views implements MastermindObserver {
 
         lblScore = new JLabel("0");
         lblScore.setFont(new Font("Dialog", Font.BOLD, 30));
-        lblScore.setForeground(Color.WHITE);
+        lblScore.setForeground(couleurTexte);
         lblScore.setBorder(paddingBorder);
         pnlScore.add(lblScore);
 
@@ -128,6 +136,7 @@ public class ViewGame extends Views implements MastermindObserver {
 
         tentativePanel.setLayout(new GridLayout(1, nbPionsCombinaison + 3));
         tentativePanel.setPreferredSize(new Dimension(width, 70));
+        tentativePanel.setBackground(couleurFondFonce);
 
 
         for (int i = 0; i < nbTentatives; i++)
@@ -140,11 +149,13 @@ public class ViewGame extends Views implements MastermindObserver {
             JPanel fillTenta = new JPanel();
             fillTenta.setBorder(new LineBorder(Color.BLACK));
             fillTenta.setLayout(new GridLayout(1, nbPionsCombinaison));
+            fillTenta.setBackground(couleurFond);
 
 
             JPanel fillIndice = new JPanel();
             fillIndice.setBorder(new LineBorder(Color.BLACK));
             fillIndice.setLayout(new GridLayout(1, nbPionsCombinaison));
+            fillIndice.setBackground(couleurFond);
 
             for (int j = 0; j < nbPionsCombinaison; j++) {
                 JLabel jl = new JLabel(new ImageIcon("assets/pions/BLANC.png"));
@@ -161,7 +172,7 @@ public class ViewGame extends Views implements MastermindObserver {
             fillPnl.add(fillTenta);
             fillPnl.add(fillIndice);
             fillPnl.setPreferredSize(new Dimension(width-60, 70));
-
+            fillPnl.setBackground(couleurFond);
 
             mainPanel.add(fillPnl);
         }
@@ -180,6 +191,7 @@ public class ViewGame extends Views implements MastermindObserver {
 
         avaibleColors.setLayout(new GridLayout(1, couleursDispo.length));
         avaibleColors.setPreferredSize(new Dimension(width, 70));
+        avaibleColors.setBackground(couleurFondFonce);
 
         pions = new JLabel[couleursDispo.length];
         for (int i = 0; i < pions.length; i++) {
@@ -316,6 +328,8 @@ public class ViewGame extends Views implements MastermindObserver {
             tentativePanel.add(duplicatedLabel);
         }
         //On ajoute la combinaison de couleurs au panel de la tentative
+        tentativePanel.setBorder(new LineBorder(Color.BLACK));
+        tentativePanel.setBackground(couleurFond);
         archiveTentative.add(tentativePanel);
 
         if(typeIndice==0){
@@ -371,6 +385,8 @@ public class ViewGame extends Views implements MastermindObserver {
         }
 
         //On ajoute le tableau d'indices au panel de la tentative
+        indicePanel.setBackground(couleurFond);
+        indicePanel.setBorder(new LineBorder(Color.BLACK));
         archiveTentative.add(indicePanel);
 
         mainPanel.remove(nbTentative-tentativeCount);

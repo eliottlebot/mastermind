@@ -5,19 +5,19 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.io.IOException;
+import javax.imageio.ImageIO;
 
 public class ViewStart extends Views {
     private GameController controller;
 
 
-    public ViewStart(GameController controller)
-    {
+    public ViewStart(GameController controller) {
         super("Paramètres du Mastermind");
         this.controller = controller;
         setSize(400, 800);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setLayout(new BorderLayout());
-
 
         setParameters();
     }
@@ -25,6 +25,7 @@ public class ViewStart extends Views {
     public void setParameters()
     {
         loadCustomFont(Font.TRUETYPE_FONT, 20);
+        Color textColor = new Color(0,0,0);
         JPanel mainPanel = new JPanel(new GridLayout(1, 2)); // GridLayout avec 1 ligne et 2 colonnes
 
         JPanel leftPanel = new JPanel(new GridLayout(6, 1)); // GridLayout pour la colonne de gauche
@@ -40,7 +41,10 @@ public class ViewStart extends Views {
         };
 
         for (String label : labels) {
-            leftPanel.add(new JLabel(label));
+            JLabel texte = new JLabel(label);
+            texte.setOpaque(false);
+            texte.setForeground(textColor);
+            leftPanel.add(texte);
         }
 
         JPanel rightPanel = new JPanel(new GridBagLayout()); // GridBagLayout pour la colonne de droite
@@ -77,6 +81,7 @@ public class ViewStart extends Views {
             textField.setColumns(10);
             gbc.gridx = 1; // Colonne 1 pour les champs de texte
             gbc.fill = GridBagConstraints.HORIZONTAL; // Remplissage horizontal pour les champs de texte
+            textField.setForeground(Color.BLACK);
             rightPanel.add(textField, gbc);
             gbc.gridx = 0; // Réinitialiser à la colonne 0 pour les labels suivants
             i++;
@@ -91,9 +96,16 @@ public class ViewStart extends Views {
         btnGroup.add(rdbFacile);
         btnGroup.add(rdbClassique);
         btnGroup.add(rdbNumerique);
+        rdbFacile.setForeground(Color.BLACK); // Définir la couleur de la police
+        rdbClassique.setForeground(Color.BLACK); // Définir la couleur de la police
+        rdbNumerique.setForeground(Color.BLACK); // Définir la couleur de la police
+        rdbFacile.setBackground(Color.WHITE); // Définir la couleur de la police
+        rdbClassique.setBackground(Color.WHITE); // Définir la couleur de la police
+        rdbNumerique.setBackground(Color.WHITE); // Définir la couleur de la police
 
 
         JPanel pnlrdb = new JPanel();
+        pnlrdb.setBackground(Color.WHITE);
         pnlrdb.add(rdbFacile);
         pnlrdb.add(rdbClassique);
         pnlrdb.add(rdbNumerique);
@@ -108,12 +120,16 @@ public class ViewStart extends Views {
         mainPanel.add(rightPanel);
 
         this.add(mainPanel);
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 0, 20));
+        mainPanel.setBackground(Color.WHITE);
+        leftPanel.setBackground(Color.WHITE);
+        rightPanel.setBackground(Color.WHITE);
         this.setVisible(true);
 
         JButton validerButton = new JButton("Valider");
-        validerButton.setForeground(Color.WHITE);
-        validerButton.setBackground(Color.BLUE);
-        validerButton.setPreferredSize(new Dimension(this.getWidth(), 100));
+        validerButton.setForeground(textColor);
+        validerButton.setBackground(new Color(141, 153, 174));
+        validerButton.setPreferredSize(new Dimension(this.getWidth(), 90));
         validerButton.addActionListener( actionEvent  -> {
             String nomJoueur = textFields[0].getText();
             int nbManches = Integer.parseInt(textFields[1].getText());
