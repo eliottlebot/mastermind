@@ -17,20 +17,16 @@ public class ViewGame extends Views implements MastermindObserver {
     private JLabel lblNumManche;
     private JLabel lblScore;
     private JScrollPane scrollPane;
-
     private JLabel selectedPion;
+    private JLabel[] pions;
+    private JLabel[] emptyCells;
     private ImageIcon draggedIcon;
-    private int nbPionsCombi;
-    private int tentativeCount = 0;
-    private int nbTentative;
     private int width=1000;
     private int length=800;
     Color couleurTexte = new Color(241, 250, 238);
     Color couleurFond = new Color(69, 123, 157);
     Color couleurFondFonce = new Color(29, 53, 87);
     Color couleurFondClaire = new Color(168, 218, 220);
-    private JLabel[] pions;
-    private JLabel[] emptyCells;
 
 
     public ViewGame(GameController controller) {
@@ -123,16 +119,18 @@ public class ViewGame extends Views implements MastermindObserver {
         setVisible(false);
     }
 
-    public void init(int nbTentatives, int nbPionsCombinaison, Integer typeIndice, int numManche)
+    public void init(Manche mancheActuelle, Integer typeIndice, int numManche)
     {
         lblScore.setText("0");
         //Je set le numéro de la manche.
         lblNumManche.setText(String.valueOf(numManche + 1));
 
         setVisible(false);
-        tentativeCount = 0;
-        this.nbTentative = nbTentatives;
-        nbPionsCombi = nbPionsCombinaison;
+        int nbTentatives = mancheActuelle.getNbTentativesMax();
+
+        int nbPionsCombinaison = mancheActuelle.getnbPionsCombi();
+
+        System.out.println(nbTentatives + " " + nbPionsCombinaison);
 
         tentativePanel.setLayout(new GridLayout(1, nbPionsCombinaison + 3));
         tentativePanel.setPreferredSize(new Dimension(width, 70));
@@ -301,7 +299,7 @@ public class ViewGame extends Views implements MastermindObserver {
 
     }
 
-    public void addTentativeUpdateIndice(Tentative tentative, Indice[] indices, Integer typeIndice, int score)
+    public void addTentativeUpdateIndice(Manche mancheActuelle, Tentative tentative, Indice[] indices, Integer typeIndice, int score)
     {
         lblScore.setText(String.valueOf(score));
         for (JLabel j: emptyCells)
@@ -309,16 +307,15 @@ public class ViewGame extends Views implements MastermindObserver {
             j.putClientProperty("couleur", null);
             j.setIcon(null);
         }
-        tentativeCount++;
         JPanel archiveTentative = new JPanel();
         archiveTentative.setLayout(new GridLayout(1, 2));
 
         JPanel tentativePanel = new JPanel();
-        tentativePanel.setLayout(new GridLayout(1, nbPionsCombi));
+        tentativePanel.setLayout(new GridLayout(1, mancheActuelle.getnbPionsCombi()));
 
         JPanel indicePanel = new JPanel();
         indicePanel.setBorder(new LineBorder(Color.BLACK));
-        indicePanel.setLayout(new GridLayout(1, nbPionsCombi));
+        indicePanel.setLayout(new GridLayout(1, mancheActuelle.getnbPionsCombi()));
 
 
         for(int i = 0; i < tentative.getCombinaison().getLength(); i++)
@@ -389,7 +386,7 @@ public class ViewGame extends Views implements MastermindObserver {
         indicePanel.setBorder(new LineBorder(Color.BLACK));
         archiveTentative.add(indicePanel);
 
-        mainPanel.remove(nbTentative-tentativeCount);
+        mainPanel.remove(mancheActuelle.getNbTentativesMax()-mancheActuelle.getNbTenta());
         mainPanel.add(archiveTentative);
     }
 

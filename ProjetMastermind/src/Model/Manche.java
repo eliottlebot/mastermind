@@ -159,6 +159,8 @@ public class Manche {
     {
         return listTentatives.size();
     }
+    public int getnbPionsCombi(){return tailleCombinaison;}
+    public int getNbTentativesMax(){return nbTentativesMax;}
 
 
     private void notifyObserversStartTentative(int nbPionsCombi)
@@ -177,7 +179,7 @@ public class Manche {
     private void notifyOberserversAddTentativeUpdateIndice(Tentative tentative, Indice[] indices)
     {
         for (MastermindObserver observer: listObservers) {
-            observer.addTentativeUpdateIndice(tentative, indices, typeIndice, getScore());
+            observer.addTentativeUpdateIndice(this, tentative, indices, typeIndice, getScore());
         }
     }
 
