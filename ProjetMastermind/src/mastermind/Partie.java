@@ -63,7 +63,6 @@ public class Partie {
         }
     }
 
-
     public int getManchesCount()
     {
         return this.mancheCount;
@@ -77,7 +76,7 @@ public class Partie {
     private void notifyObserversInit(int nbTentatives, int nbPionsCombi)
     {
         for (MastermindObserver observer: listObservers) {
-            observer.init(nbTentatives, nbPionsCombi);
+            observer.init(nbTentatives, nbPionsCombi, typeIndice);
         }
     }
 }

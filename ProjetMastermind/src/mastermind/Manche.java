@@ -60,15 +60,17 @@ public class Manche {
         //Auquel cas on mettra un Blanc, sinon on ne met rien
 
         boolean finished = true;
-        //Nouveau compteur de couleurs qui permettra de savoir si toutes les occurences d'une couleur ont été trouvées
-        HashMap<Couleurs, Integer> compteurTemp = new HashMap<Couleurs, Integer>();
-        initCompteur(compteurTemp);
+
 
         //On récupère la tentative actuelle (la dernière tentative ajoutée à la manche actuelle)
         Tentative tentativeActuelle = listTentatives.get(listTentatives.size() - 1);
 
         //On réinitialise le tableau d'indices de la tentative, comme ça on peut repartir de 0 et éviter les bugs
         Arrays.fill(tentativeActuelle.getIndices(), Indice.VIDE);
+
+        //Nouveau compteur de couleurs qui permettra de savoir si toutes les occurences d'une couleur ont été trouvées
+        HashMap<Couleurs, Integer> compteurTemp = new HashMap<Couleurs, Integer>();
+        initCompteur(compteurTemp);
 
         //Premier tour de boucle parcourt la liste des couleurs, pour placer des poins noirs au bon endroit
         for(int i =0; i<tailleCombinaison; i++) {
@@ -165,7 +167,7 @@ public class Manche {
     private void notifyOberserversAddTentativeUpdateIndice(Tentative tentative, Indice[] indices)
     {
         for (MastermindObserver observer: listObservers) {
-            observer.addTentativeUpdateIndice(tentative, indices);
+            observer.addTentativeUpdateIndice(tentative, indices, typeIndice);
         }
     }
 
