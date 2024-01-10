@@ -8,7 +8,7 @@ public class ViewEnd extends Views {
     public ViewEnd()
     {
         super("Fin de partie");
-        setSize(600, 800);
+        setSize(800, 800);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setVisible(false);
     }
@@ -16,12 +16,14 @@ public class ViewEnd extends Views {
     {
         JPanel mainPnl = new JPanel();
         mainPnl.setLayout(new BoxLayout(mainPnl, BoxLayout.Y_AXIS));
+        mainPnl.setAlignmentX(Component.CENTER_ALIGNMENT);
+        mainPnl.setAlignmentY(Component.CENTER_ALIGNMENT);
 
         JLabel lblTitre = new JLabel();
         lblTitre.setForeground(Color.WHITE);
         mainPnl.setBackground(Color.BLUE);
-        lblTitre.setHorizontalAlignment(SwingConstants.CENTER);
         lblTitre.setText("Fin de partie - " + nomJoueur);
+        lblTitre.setHorizontalAlignment(SwingConstants.CENTER);
         Font customFont = loadCustomFont(Font.TRUETYPE_FONT, 40);
         lblTitre.setFont(customFont);
 
@@ -30,6 +32,7 @@ public class ViewEnd extends Views {
 
         JLabel lblScoreTitre = new JLabel();
         lblScoreTitre.setText("Score total");
+        lblScoreTitre.setAlignmentX(Component.CENTER_ALIGNMENT);
         Font customFont2 = loadCustomFont(Font.TRUETYPE_FONT, 30);
         lblScoreTitre.setFont(customFont2);
 
@@ -46,6 +49,7 @@ public class ViewEnd extends Views {
 
         JLabel lblScoreChaqueManche = new JLabel();
         lblScoreChaqueManche.setText("Score de chaque manche");
+        lblScoreChaqueManche.setAlignmentX(Component.CENTER_ALIGNMENT);
         lblScoreChaqueManche.setFont(customFont2);
         lblScoreChaqueManche.setForeground(Color.WHITE);
         mainPnl.add(lblScoreChaqueManche);
@@ -62,7 +66,6 @@ public class ViewEnd extends Views {
 
             JLabel lblBarre = new JLabel(String.valueOf(tabScore[i]));
             lblBarre.setFont(new Font("Arial", Font.BOLD, 20));
-            lblBarre.setHorizontalAlignment(SwingConstants.CENTER);
             lblBarre.setForeground(Color.BLUE);
 
             pnlBarre.add(barre, BorderLayout.CENTER);
@@ -75,10 +78,11 @@ public class ViewEnd extends Views {
         mainPnl.add(diagBarres);
 
         JLabel lblNbTenta = new JLabel();
-        lblScoreChaqueManche.setText("Nombre de tentatives pour chaque manche");
-        lblScoreChaqueManche.setFont(customFont2);
-        lblScoreChaqueManche.setForeground(Color.WHITE);
-        mainPnl.add(lblScoreChaqueManche);
+        lblNbTenta.setText("Nombre de tentatives pour chaque manche");
+        lblNbTenta.setAlignmentX(Component.CENTER_ALIGNMENT);
+        lblNbTenta.setFont(customFont2);
+        lblNbTenta.setForeground(Color.WHITE);
+        mainPnl.add(lblNbTenta);
 
 
         JPanel diagBarres2 = new JPanel(new FlowLayout());
@@ -120,9 +124,8 @@ public class ViewEnd extends Views {
 
         });
         mainPnl.add(rejouerButton);*/
-
-
         setVisible(true);
+
     }
 
     private void animateBarVertical(JProgressBar barre, int valeurFinale)
