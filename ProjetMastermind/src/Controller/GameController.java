@@ -1,4 +1,8 @@
-package mastermind;
+package Controller;
+
+import Model.*;
+import View.ViewEnd;
+
 public class GameController {
     private Plateau plateau;
     private Partie partie;
@@ -29,7 +33,7 @@ public class GameController {
         }
         else
         {
-            viewEnd.end(plateau.getNomJoueur(), partie.getScore(), partie.getTabScores());
+            viewEnd.end(plateau.getNomJoueur(), partie.getScore(), partie.getTabScores(), partie.getTabTenta());
         }
     }
 
@@ -44,7 +48,6 @@ public class GameController {
         }
         tentativeActuelle.setCombinaisonCouleur(tentative);
         mancheActuelle.addTentative(tentativeActuelle);
-        System.out.println("test");
         if(mancheActuelle.verifierCombinaisonIndices())//manche terminée
         {
             partie.updateScore();
@@ -58,8 +61,5 @@ public class GameController {
         partie.updateScore();
         mancheActuelle.giveUp();
         gameStart();
-    }
-    public int getMancheActuelle(){
-        return this.partie.getManchesCount();
     }
 }

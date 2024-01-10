@@ -1,4 +1,4 @@
-package mastermind;
+package Model;
 
 import java.util.*;
 
@@ -153,6 +153,11 @@ public class Manche {
     public void giveUp()
     {
         notifyOberserversNewManche(false, listTentatives.size());
+    }
+
+    public int getNbTenta()
+    {
+        return listTentatives.size();
     }
 
 

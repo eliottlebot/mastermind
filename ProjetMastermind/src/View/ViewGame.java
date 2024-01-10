@@ -1,24 +1,22 @@
-package mastermind;
+package View;
+
+import Controller.GameController;
+import Model.*;
 
 import javax.swing.*;
-import java.util.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
-import javax.swing.plaf.metal.MetalBorders;
 
 public class ViewGame extends Views implements MastermindObserver {
-    GameController controller;
-    JPanel mainPanel = new JPanel();
-    JPanel tentativePanel = new JPanel();
-    JPanel avaibleColors = new JPanel();
-    JLabel lblNumManche;
-    JLabel lblScore;
-    JScrollPane scrollPane;
+    private GameController controller;
+    private JPanel mainPanel = new JPanel();
+    private JPanel tentativePanel = new JPanel();
+    private JPanel avaibleColors = new JPanel();
+    private JLabel lblNumManche;
+    private JLabel lblScore;
+    private JScrollPane scrollPane;
 
     private JLabel selectedPion;
     private ImageIcon draggedIcon;

@@ -1,4 +1,4 @@
-package mastermind;
+package Model;
 public enum Couleurs {
     BLEU,
     ORANGE,
