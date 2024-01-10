@@ -31,10 +31,11 @@ public class Partie {
     {
         if(getManchesCount() < getNbManches())
         {
-            notifyObserversInit(nbTentatives, nbPionsCombinaison);
+
             mancheCount++;
             mancheActuelle = new Manche(nbPionsDispo, nbPionsCombinaison, nbTentatives, listObservers, typeIndice);
             mancheActuelle.genererCombinaisonAleatoire();
+            notifyObserversInit(nbTentatives, nbPionsCombinaison);
             return mancheActuelle;
         }
 
@@ -95,7 +96,7 @@ public class Partie {
     private void notifyObserversInit(int nbTentatives, int nbPionsCombi)
     {
         for (MastermindObserver observer: listObservers) {
-            observer.init(nbTentatives, nbPionsCombi, typeIndice, mancheCount);
+            observer.init(mancheActuelle, typeIndice, mancheCount);
         }
     }
 }
