@@ -35,7 +35,7 @@ public class Partie {
             mancheCount++;
             mancheActuelle = new Manche(nbPionsDispo, nbPionsCombinaison, nbTentatives, listObservers, typeIndice);
             mancheActuelle.genererCombinaisonAleatoire();
-            notifyObserversInit(nbTentatives, nbPionsCombinaison);
+            notifyObserversInit();
             return mancheActuelle;
         }
 
@@ -64,9 +64,7 @@ public class Partie {
         Couleurs[] couleursDispo = new Couleurs[nbPionsDispo];
         Couleurs[] toutesLesCouleurs = Couleurs.values();
 
-        for (int i = 0; i < nbPionsDispo; i++) {
-            couleursDispo[i] = toutesLesCouleurs[i];
-        }
+        System.arraycopy(toutesLesCouleurs, 0, couleursDispo, 0, nbPionsDispo);
 
         for (MastermindObserver observer: listObservers) {
             observer.showAvaibleColors(couleursDispo);
@@ -93,10 +91,10 @@ public class Partie {
         return this.tabTenta;
     }
 
-    private void notifyObserversInit(int nbTentatives, int nbPionsCombi)
+    private void notifyObserversInit()
     {
         for (MastermindObserver observer: listObservers) {
-            observer.init(mancheActuelle, typeIndice, mancheCount);
+            observer.init(mancheActuelle ,typeIndice, mancheCount);
         }
     }
 }

@@ -168,50 +168,15 @@ public class ViewStart extends Views {
                 return true;
             }
             int value = Integer.parseInt(text);
-            switch (typeField)
-            {
-                case 1:
-                    if(value > 0 && value < 6)
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                case 2:
-                    if(value > 3 && value < 9)
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                case 3:
-                    if(value > 1 && value < 7)
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                case 4:
-                    if(value > 1 && value < 13)
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
-                    }
-            }
-            return false;
+            return switch (typeField) {
+                case 1 -> value > 0 && value < 6;
+                case 2 -> value > 3 && value < 9;
+                case 3 -> value > 1 && value < 7;
+                case 4 -> value > 1 && value < 13;
+                default -> false;
+            };
         } catch (NumberFormatException e) {
             return false;
         }
     }
-
-
 }

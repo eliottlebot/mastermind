@@ -17,6 +17,7 @@ public class ViewGame extends Views implements MastermindObserver {
     private JLabel lblNumManche;
     private JLabel lblScore;
     private JScrollPane scrollPane;
+
     private JLabel selectedPion;
     private JLabel[] pions;
     private JLabel[] emptyCells;
@@ -123,7 +124,7 @@ public class ViewGame extends Views implements MastermindObserver {
     {
         lblScore.setText("0");
         //Je set le numéro de la manche.
-        lblNumManche.setText(String.valueOf(numManche + 1));
+        lblNumManche.setText(String.valueOf(numManche));
 
         setVisible(false);
         int nbTentatives = mancheActuelle.getNbTentativesMax();
@@ -320,7 +321,7 @@ public class ViewGame extends Views implements MastermindObserver {
 
         for(int i = 0; i < tentative.getCombinaison().getLength(); i++)
         {
-            ImageIcon originalIcon = new ImageIcon("assets/pions/" + tentative.getCouleurs()[i] + ".png");
+            ImageIcon originalIcon = new ImageIcon("assets/pions/" + tentative.getCombinaison().getCombinaison()[i] + ".png");
             JLabel duplicatedLabel = new JLabel(originalIcon);
             tentativePanel.add(duplicatedLabel);
         }
