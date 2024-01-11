@@ -21,11 +21,6 @@ public class Tentative {
         return this.combinaisonCouleur;
     }
 
-    public Couleurs[] getCouleurs()
-    {
-        return this.getCombinaison().getCombinaison();
-    }
-
     public Indice[] getIndices()
     {
         return this.indices;

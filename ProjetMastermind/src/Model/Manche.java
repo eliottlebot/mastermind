@@ -12,8 +12,6 @@ public class Manche {
     private int score = 0;
     private List<MastermindObserver> listObservers;
     private HashMap<Couleurs, Integer> compteurCouleurs = new HashMap<Couleurs, Integer>();
-
-
     public Manche(int nbPionsDispo, Integer tailleCombinaison, Integer nombreTentatives, List<MastermindObserver> obervers, int typeIndice){
         this.nbPionsDispo = nbPionsDispo;
         this.tailleCombinaison = tailleCombinaison;
@@ -179,7 +177,7 @@ public class Manche {
     private void notifyOberserversAddTentativeUpdateIndice(Tentative tentative, Indice[] indices)
     {
         for (MastermindObserver observer: listObservers) {
-            observer.addTentativeUpdateIndice(this, tentative, indices, typeIndice, getScore());
+            observer.addTentativeUpdateIndice(this, tentative, indices, typeIndice, score);
         }
     }
 

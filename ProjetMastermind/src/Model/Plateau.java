@@ -12,18 +12,14 @@ public class Plateau {
     {
         return new Partie(listObservers, nbManches, nbPionsDispo, nbPionsCombinaison, nbTentatives, typeIndice);
     }
-
     public void setJoueur(String nom)
     {
         nomJoueur = nom;
     }
-
-
     public void addObserver(MastermindObserver mastermindObserver)
     {
         listObservers.add(mastermindObserver);
     }
-
     public String getNomJoueur()
     {
         return this.nomJoueur;
