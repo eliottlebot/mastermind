@@ -50,7 +50,6 @@ package models
         - tailleCombinaison: Integer
         - nbPionsDispo: Integer
         - score: Integer
-        - compteurCouleurs : <CouleurPion, Integer>[*]
 
         + <<create>> Manche(nbPionsDispo: Integer, tailleCombinaison: Integer, nombreTentatives: Integer, obervers: MastermindObserver[*])
         + createTentative(): Tentative
@@ -168,6 +167,7 @@ Partie *---> "*\n -manche" Manche : Crée >
 Partie "*" o--> "*\n-listeObservers" mastermindObserver: observe <
 Manche "*" o--> "*\n-listeObservers" mastermindObserver: observe <
 Manche o-->"2..12\n -listTentatives" Tentative : Crée >
+Manche o-down-> "4..8\n-compteurCouleurs"CouleurPion
 
 Tentative *--->"4..6 \n-indices" Indice : Possède >
 
