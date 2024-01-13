@@ -16,12 +16,13 @@ public class Plateau {
     {
         nomJoueur = nom;
     }
-    public void addObserver(MastermindObserver mastermindObserver)
-    {
-        listObservers.add(mastermindObserver);
-    }
     public String getNomJoueur()
     {
         return this.nomJoueur;
     }
+    public void addObserver(MastermindObserver mastermindObserver)
+    {
+        listObservers.add(mastermindObserver);
+    }
+
 }

@@ -16,12 +16,7 @@ public class GameController {
         this.plateau = plateau;
     }
 
-    public void createPartie(String nomJoueur, int nbManches, int nbPionsDispo, int nbPionsCombinaison, int nbTentatives, int typeIndice)
-    {
-        plateau.setJoueur(nomJoueur);
-        partie = plateau.createPartie(nbManches, nbPionsDispo, nbPionsCombinaison, nbTentatives, typeIndice);
-        gameStart();
-    }
+
 
 
     public void gameStart()
@@ -36,6 +31,15 @@ public class GameController {
             viewEnd.end(plateau.getNomJoueur(), partie.getScore(), partie.getTabScores(), partie.getTabTenta());
         }
     }
+
+
+    public void createPartie(String nomJoueur, int nbManches, int nbPionsDispo, int nbPionsCombinaison, int nbTentatives, int typeIndice)
+    {
+        plateau.setJoueur(nomJoueur);
+        partie = plateau.createPartie(nbManches, nbPionsDispo, nbPionsCombinaison, nbTentatives, typeIndice);
+        gameStart();
+    }
+
 
     public void validerTentative(Combinaison tentative)
     {

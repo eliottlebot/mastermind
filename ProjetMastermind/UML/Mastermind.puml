@@ -14,7 +14,7 @@ package models
     class Plateau
     {
         -nomJoueur : String
-        +createPartie(nbManches: Integer, nbPionsDispo: Integer, nbPionsCombinaison: Integer, nbTentatives: Integer): Partie
+        +createPartie(nbManches: Integer, nbPionsDispo: Integer, nbPionsCombinaison: Integer, nbTentatives: Integer, typeIndice: Integer): Partie
         +setJoueur(nom: String)
         +getNomJoueur() : String
         +addObserver(mastermindObserver: MastermindObserver)
@@ -32,11 +32,12 @@ package models
         - score: Integer
         - tabScore : Integer[*]
         - tabTenta : Integer[*]
-        + <<create>> Partie(observers: MastermindObserver[*], nbManches: Integer, nbPionsDispo: Integer, nbPionsCombinaison: Integer, nbTentatives: Integer)
+        + <<create>> Partie(observers: MastermindObserver[*], nbManches: Integer, nbPionsDispo: Integer, nbPionsCombinaison: Integer, nbTentatives: Integer, typeIndice: Integer)
         + createManche(): Manche
         + updateScore()
         + getScore(): Integer
         + getManchesCount() : Integer
+        + getNbManches() : Integer
         + getTabScores() : Integer[*]
         + getTabTenta() : Integer[*]
         - notifyObserversShowAvaibleColors()
@@ -49,22 +50,24 @@ package models
         - nbTentativesMax: Integer
         - tailleCombinaison: Integer
         - nbPionsDispo: Integer
+        - typeIndice: Integer
         - score: Integer
 
-        + <<create>> Manche(nbPionsDispo: Integer, tailleCombinaison: Integer, nombreTentatives: Integer, obervers: MastermindObserver[*])
+        + <<create>> Manche(nbPionsDispo: Integer, tailleCombinaison: Integer, nombreTentatives: Integer, obervers: MastermindObserver[*], typeIndice: Integer)
         + createTentative(): Tentative
         + addTentative(tentative : Tentative)
+        + genererCombinaisonAleatoire()
         + verifierCombinaisonIndices() : Boolean
-        + couleurDansCombinaison(combinaisonSecrete: CouleurPion[], couleur: CouleurPion): Boolean
-        + initCompteur(compteur : <CouleurPion, Integer>[*])
-        + giveUp()
+        + couleurDansCombinaison(combinaisonSecrete: Combinaison, couleur: Couleurs): Boolean
+        + initCompteur(compteur : <Couleurs, Integer>[*])
         + getScore(): Integer
+        + giveUp()
         + getNbTenta() : Integer
         + getNbPionsCombi() : Integer
         + getNbTentativesMax() : Integer
         - notifyObserversStartTentative(nbPionsCombi: Integer)
         - notifyObserversNewManche(isWin : Boolean, nbTentatives : Integer)
-        - notifyObserversUpdateIndice(manche:  Manche, tentative : Tentative, indices: Indices[])
+        - notifyOberserversAddTentativeUpdateIndice(tentative : Tentative, indices: Indice[])
     }
 
     class Tentative
@@ -79,21 +82,21 @@ package models
     class Combinaison
     {
         +<<create>>Combinaison(tailleCombinaison : Integer)
-        +getCombinaison() : CouleurPion[*]
+        +getCombinaison() : Couleurs[*]
         +genererCombinaisonAleatoire(dispoPions : Integer)
     }
 
 
     interface mastermindObserver <<interface>>
     {
-        {abstract} + init(manche: Manche, typeIndice: Integer, numManche: Integer)
-        {abstract} + showAvaibleColors(couleursDispo: Couleurs[])
-        {abstract} + startTentative(nbPionsCombi: Integer)
-        {abstract} + updateIndice(indices: Indices[])
-        {abstract} + newManche(isWin : Boolean, nbTentatives : Integer)
+        + init(manche: Manche, typeIndice: Integer, numManche: Integer)
+        + showAvaibleColors(couleursDispo: Couleurs[])
+        + startTentative(nbPionsCombi: Integer)
+        + addTentativeUpdateIndice(manche: Manche, tentative: Tentative, indices: Indice[], typeIndice: Integer, score: Integer);
+        + newManche(isWin : Boolean, nbTentatives : Integer)
     }
 
-    enum CouleurPion <<enumeration>>
+    enum Couleurs <<enumeration>>
     {
         +BLEU
         +ORANGE
@@ -131,17 +134,17 @@ package view
         - length: Integer
         +<<create>>ViewGame(gameController: GameController)
         + init(mancheActuelle : Manche, typeIndice : Integer, numManche : Integer)
-        + showAvaibleColors(couleursDispo: CouleurPion[])
+        + showAvaibleColors(couleursDispo: Couleurs[])
         + startTentative(nbPionsCombi: Integer)
-        + updateIndice(indices: Indice[])
         + addTentativeUpdateIndice(mancheActuelle : Manche, tentative : Tentative, indices : Indice[], typeIndice : Integer, score : Integer)
+        + newManche(isWin: Boolean, nbTentatives: Integer)
     }
 
 
     class ViewEnd
     {
         +<<create>>ViewEnd()
-        + end(nomJoueur : String, score : Integer, tabScore : Integer[], tabTenta : Integer)
+        + end(nomJoueur : String, score : Integer, tabScore : Integer[*], tabTenta : Integer[*])
         - animateBarVertical(barre : JProgressBar, valeurFinale : Integer)
     }
 }
@@ -153,37 +156,34 @@ package controller
     {
         + <<create>> GameController(plateau: Plateau, viewEnd : ViewEnd)
         + gameStart()
-        + createPartie(nbManches: Integer, nbPionsDispo: Integer, nbPionsCombinaison: Integer, nbTentatives: Integer)
-        + validerTentative(tentative: CouleurPion[])
+        + createPartie(nomJoueur: String, nbManches: Integer, nbPionsDispo: Integer, nbPionsCombinaison: Integer, nbTentatives: Integer, typeIndice: Integer)
+        + validerTentative(tentative: Combinaison)
         + giveUpManche()
     }
 }
 
 
 Plateau o-->Partie : Crée
-Plateau "*" o--> "*\n-listeObservers" mastermindObserver: observe <
-Partie *---> "*\n -manche" Manche : Crée >
+Plateau "*" o--> "*\n-listObservers" mastermindObserver: observe <
+Partie *---> "*\n -mancheActuelle" Manche : Crée >
 
-Partie "*" o--> "*\n-listeObservers" mastermindObserver: observe <
-Manche "*" o--> "*\n-listeObservers" mastermindObserver: observe <
+Partie "*" o--> "*\n-listObservers" mastermindObserver: observe <
+Manche "*" o--> "*\n-listObservers" mastermindObserver: observe <
 Manche o-->"2..12\n -listTentatives" Tentative : Crée >
-Manche o-down-> "4..8\n-compteurCouleurs"CouleurPion
+Manche o-down-> "4..8\n-compteurCouleurs"Couleurs
 
-Tentative *--->"4..6 \n-indices" Indice : Possède >
+Tentative o--->"4..6 \n-indices" Indice : Possède >
 
 
 ViewGame o-up-> "1\n -controller" GameController
-ViewGame ..> Manche : <<use>>
-ViewGame ..> Tentative : <<use>>
-ViewGame ..> Indice : <<use>>
 ViewEnd o-up-> "1\n -controller" GameController
 ViewStart o-up-> "1\n -controller" GameController
 
 GameController o-down-> "1\n -viewEnd" ViewEnd
-GameController o-left-> "1\n manipule" Partie
-GameController o-left-> "1\n manipule" Plateau
-GameController o-left-> "1\n manipule" Manche
-GameController o-left-> "1\n manipule" Tentative
+GameController o-left-> "1\n -partie" Partie: manipule >
+GameController o-left-> "1\n -plateau" Plateau: utilise >
+GameController o-left-> "1\n -mancheActuelle" Manche: manipule >
+GameController o-left-> "1\n -tentativeActuelle" Tentative: manipule >
 
 Main ..> Plateau : <<use>>
 Main ..> GameController : <<use>>
@@ -191,8 +191,8 @@ Main ..> ViewGame : <<use>>
 Main ..> ViewStart : <<use>>
 
 Manche *--> "1\n -combinaisonSecrete" Combinaison
-Tentative *--> "1\n -combiJoueur" Combinaison
-Combinaison *--> "4..6\n possède" CouleurPion
+Tentative *--> "1\n -combinaisonCouleur" Combinaison
+Combinaison o--> "4..6\n -combinaison" Couleurs
 
 
 @enduml
