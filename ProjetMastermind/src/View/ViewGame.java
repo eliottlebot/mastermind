@@ -27,8 +27,6 @@ public class ViewGame extends Views implements MastermindObserver {
     Color couleurTexte = new Color(241, 250, 238);
     Color couleurFond = new Color(69, 123, 157);
     Color couleurFondFonce = new Color(29, 53, 87);
-    Color couleurFondClaire = new Color(168, 218, 220);
-
 
     public ViewGame(GameController controller) {
 
@@ -129,7 +127,7 @@ public class ViewGame extends Views implements MastermindObserver {
         setVisible(false);
         int nbTentatives = mancheActuelle.getNbTentativesMax();
 
-        int nbPionsCombinaison = mancheActuelle.getnbPionsCombi();
+        int nbPionsCombinaison = mancheActuelle.getNbPionsCombi();
 
         System.out.println(nbTentatives + " " + nbPionsCombinaison);
 
@@ -312,11 +310,11 @@ public class ViewGame extends Views implements MastermindObserver {
         archiveTentative.setLayout(new GridLayout(1, 2));
 
         JPanel tentativePanel = new JPanel();
-        tentativePanel.setLayout(new GridLayout(1, mancheActuelle.getnbPionsCombi()));
+        tentativePanel.setLayout(new GridLayout(1, mancheActuelle.getNbPionsCombi()));
 
         JPanel indicePanel = new JPanel();
         indicePanel.setBorder(new LineBorder(Color.BLACK));
-        indicePanel.setLayout(new GridLayout(1, mancheActuelle.getnbPionsCombi()));
+        indicePanel.setLayout(new GridLayout(1, mancheActuelle.getNbPionsCombi()));
 
 
         for(int i = 0; i < tentative.getCombinaison().getLength(); i++)

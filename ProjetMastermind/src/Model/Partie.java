@@ -59,18 +59,6 @@ public class Partie {
         return this.score;
     }
 
-    private void notifyObserversShowAvaibleColors()
-    {
-        Couleurs[] couleursDispo = new Couleurs[nbPionsDispo];
-        Couleurs[] toutesLesCouleurs = Couleurs.values();
-
-        System.arraycopy(toutesLesCouleurs, 0, couleursDispo, 0, nbPionsDispo);
-
-        for (MastermindObserver observer: listObservers) {
-            observer.showAvaibleColors(couleursDispo);
-        }
-    }
-
     public int getManchesCount()
     {
         return this.mancheCount;
@@ -89,6 +77,17 @@ public class Partie {
     public int[] getTabTenta()
     {
         return this.tabTenta;
+    }
+    private void notifyObserversShowAvaibleColors()
+    {
+        Couleurs[] couleursDispo = new Couleurs[nbPionsDispo];
+        Couleurs[] toutesLesCouleurs = Couleurs.values();
+
+        System.arraycopy(toutesLesCouleurs, 0, couleursDispo, 0, nbPionsDispo);
+
+        for (MastermindObserver observer: listObservers) {
+            observer.showAvaibleColors(couleursDispo);
+        }
     }
 
     private void notifyObserversInit()

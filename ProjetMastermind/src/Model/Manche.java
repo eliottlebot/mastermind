@@ -40,7 +40,6 @@ public class Manche {
     public void genererCombinaisonAleatoire()
     {
         combinaisonSecrete.genererCombinaisonAleatoire(nbPionsDispo);
-        Integer value;
         for(int i =0; i<tailleCombinaison; i++){
             Couleurs temp = combinaisonSecrete.getCombinaison()[i];
             compteurCouleurs.put(temp, compteurCouleurs.get(temp)+1);
@@ -92,7 +91,6 @@ public class Manche {
         //Deuxieme tour de boucle qui vérifie d'abord que l'indice à l'index donné nest pas déja noir, puis voit si elle met un indice blanc ou vide, en fonction du compteur de couleurs
         for(int i =0; i<tailleCombinaison; i++){
             Couleurs couleurTentative = tentativeActuelle.getCombinaison().getCombinaison()[i];
-            Couleurs couleurSecrete = combinaisonSecrete.getCombinaison()[i];
             if(tentativeActuelle.getIndices()[i]!=Indice.NOIR){
                 if (couleurDansCombinaison(combinaisonSecrete, couleurTentative))
                 {
@@ -157,7 +155,7 @@ public class Manche {
     {
         return listTentatives.size();
     }
-    public int getnbPionsCombi(){return tailleCombinaison;}
+    public int getNbPionsCombi(){return tailleCombinaison;}
     public int getNbTentativesMax(){return nbTentativesMax;}
 
 
