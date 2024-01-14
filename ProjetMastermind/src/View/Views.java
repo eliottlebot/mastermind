@@ -1,7 +1,8 @@
 package View;
 
 import java.awt.*;
-import java.io.File;
+import java.io.InputStream;
+import java.net.URL;
 import javax.swing.*;
 
 public abstract class Views extends JFrame {
@@ -10,18 +11,26 @@ public abstract class Views extends JFrame {
     {
         super(nom);
 
-        ImageIcon img = new ImageIcon("assets/icone/mastermind.jpg");
+        ImageIcon img = new ImageIcon(getClass().getResource("/assets/icone/mastermind.jpg"));
         super.setIconImage(img.getImage());
     }
 
     public Font loadCustomFont(int style, int size) {
-        String path = "assets/fonts/Capuche.otf";
+        String path = "/assets/fonts/Capuche.otf";
         customFont = null;
         try {
-            File fontFile = new File(path);
-            this.customFont = Font.createFont(Font.TRUETYPE_FONT, fontFile).deriveFont(style, size);
+            URL fontURL = getClass().getResource(path);
+
+            if (fontURL != null) {
+                InputStream fontInputStream = fontURL.openStream();
+                this.customFont = Font.createFont(Font.TRUETYPE_FONT, fontInputStream).deriveFont(style, size);
+                fontInputStream.close();
+            } else {
+                System.err.println("La police n'a pas été trouvée : " + path);
+            }
         }
         catch (Exception e) {
+            this.customFont = new Font("Arial", Font.BOLD, 30);
             e.printStackTrace();
         }
         return customFont;

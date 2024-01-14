@@ -155,14 +155,14 @@ public class ViewGame extends Views implements MastermindObserver {
             fillIndice.setBackground(couleurFond);
 
             for (int j = 0; j < nbPionsCombinaison; j++) {
-                JLabel jl = new JLabel(new ImageIcon("assets/pions/BLANC.png"));
+                JLabel jl = new JLabel(new ImageIcon(getClass().getResource("/assets/pions/BLANC.png")));
                 fillTenta.add(jl);
             }
 
             //En fonction du mode d'affichage des indices, on met soit des ronds vides, soit on affiche rien
             if(typeIndice<2) {
                 for (int j = 0; j < nbPionsCombinaison; j++) {
-                    JLabel jl2 = new JLabel(new ImageIcon("assets/indices/VIDE.png"));
+                    JLabel jl2 = new JLabel(new ImageIcon(getClass().getResource("/assets/indices/VIDE.png")));
                     fillIndice.add(jl2);
                 }
             }
@@ -192,7 +192,7 @@ public class ViewGame extends Views implements MastermindObserver {
 
         pions = new JLabel[couleursDispo.length];
         for (int i = 0; i < pions.length; i++) {
-            pions[i] = new JLabel(new ImageIcon("assets/pions/" + couleursDispo[i] + ".png"));
+            pions[i] = new JLabel(new ImageIcon(getClass().getResource("/assets/pions/" + couleursDispo[i] + ".png")));
             //pions[i].setTransferHandler(new TransferHandler("icon"));
             pions[i].addMouseListener(new PionMouseListener());
             pions[i].addMouseMotionListener(new PionsMouseMotionListener());
@@ -319,7 +319,7 @@ public class ViewGame extends Views implements MastermindObserver {
 
         for(int i = 0; i < tentative.getCombinaison().getLength(); i++)
         {
-            ImageIcon originalIcon = new ImageIcon("assets/pions/" + tentative.getCombinaison().getCombinaison()[i] + ".png");
+            ImageIcon originalIcon = new ImageIcon(getClass().getResource("/assets/pions/" + tentative.getCombinaison().getCombinaison()[i] + ".png"));
             JLabel duplicatedLabel = new JLabel(originalIcon);
             tentativePanel.add(duplicatedLabel);
         }
@@ -332,9 +332,9 @@ public class ViewGame extends Views implements MastermindObserver {
             for (Indice index : indices) {
                 JLabel j = new JLabel();
                 switch (index) {
-                    case NOIR -> j.setIcon(new ImageIcon("assets/indices/NOIR.png"));
-                    case BLANC -> j.setIcon(new ImageIcon("assets/indices/BLANC.png"));
-                    case VIDE -> j.setIcon(new ImageIcon("assets/indices/VIDE.png"));
+                    case NOIR -> j.setIcon(new ImageIcon(getClass().getResource("/assets/indices/NOIR.png")));
+                    case BLANC -> j.setIcon(new ImageIcon(getClass().getResource("/assets/indices/BLANC.png")));
+                    case VIDE -> j.setIcon(new ImageIcon(getClass().getResource("/assets/indices/VIDE.png")));
                 }
                 indicePanel.add(j);
             }
@@ -350,18 +350,18 @@ public class ViewGame extends Views implements MastermindObserver {
             }
             for(int i =0; i<nbNoirs; i++){
                 JLabel j = new JLabel();
-                j.setIcon(new ImageIcon("assets/indices/NOIR.png"));
+                j.setIcon(new ImageIcon(getClass().getResource("/assets/indices/NOIR.png")));
                 indicePanel.add(j);
             }
             for(int i =0; i<nbBlancs; i++){
                 JLabel j = new JLabel();
-                j.setIcon(new ImageIcon("assets/indices/BLANC.png"));
+                j.setIcon(new ImageIcon(getClass().getResource("/assets/indices/BLANC.png")));
                 indicePanel.add(j);
             }
             //On rempli le reste avec des indices "vides"
             for(int i = 0; i< indices.length - (nbNoirs+nbBlancs); i++){
                 JLabel j = new JLabel();
-                j.setIcon(new ImageIcon("assets/indices/VIDE.png"));
+                j.setIcon(new ImageIcon(getClass().getResource("/assets/indices/VIDE.png")));
                 indicePanel.add(j);
             }
         }
@@ -409,7 +409,7 @@ public class ViewGame extends Views implements MastermindObserver {
         messageWin.setText(messageWin.getText() + " avec " + nbTentatives + " tentatives");
 
 
-        ImageIcon icon = new ImageIcon("assets/icone/mastermind.jpg");
+        ImageIcon icon = new ImageIcon(getClass().getResource("/assets/icone/mastermind.jpg"));
         JOptionPane.showMessageDialog(null, messageWin, "Fin de la manche", JOptionPane.INFORMATION_MESSAGE, icon);
         setVisible(false);
     }
