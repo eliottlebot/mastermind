@@ -5,8 +5,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
-import java.io.IOException;
-import javax.imageio.ImageIO;
 
 public class ViewStart extends Views {
     private GameController controller;
@@ -15,7 +13,7 @@ public class ViewStart extends Views {
     public ViewStart(GameController controller) {
         super("Paramètres du Mastermind");
         this.controller = controller;
-        setSize(400, 800);
+        //setSize(400, 800);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setLayout(new BorderLayout());
 

@@ -120,7 +120,17 @@ package models
 
 package view
 {
-    class ViewStart
+    abstract class Views <<abstract>>
+    {
+        +<<create>>Views(nom : String)
+        +loadCustomFont(style : Integer, size : Integer) : Font
+        +setCustomFontForComponents(container : Container)
+        +setCustomFontForComponents(container : Container, XFont : Font)
+        +setCustomFontForComponents(components : Components[*])
+        +setCustomFontForComponent(component : Component, XFont : Font)
+
+    }
+    class ViewStart extends Views
     {
         + <<create>> ViewStart(controller: GameController)
         + setParameters()
@@ -128,7 +138,7 @@ package view
     }
 
 
-    class ViewGame implements mastermindObserver
+    class ViewGame extends Views implements mastermindObserver
     {
         - width: Integer
         - length: Integer
@@ -141,7 +151,7 @@ package view
     }
 
 
-    class ViewEnd
+    class ViewEnd extends Views
     {
         +<<create>>ViewEnd()
         + end(nomJoueur : String, score : Integer, tabScore : Integer[*], tabTenta : Integer[*])
