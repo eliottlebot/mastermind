@@ -21,5 +21,5 @@
 
 ### Si vous n'avez pas installé java
 
-+ Installer java [ici](installer_java/java_installer_windows.jar)
++ Installer java [ici](installer_java/java_installer_windows.exe)
 + Vous pouvez maintenant faire les étapes au-dessus!
