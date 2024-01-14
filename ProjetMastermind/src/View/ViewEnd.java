@@ -12,6 +12,7 @@ public class ViewEnd extends Views {
         setSize(800, 800);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setVisible(false);
+        getContentPane().setBackground(Color.WHITE);
     }
     public void end(String nomJoueur, int score, int[] tabScore, int[] tabTenta)
     {
@@ -22,14 +23,17 @@ public class ViewEnd extends Views {
 
         JLabel lblTitre = new JLabel();
         lblTitre.setForeground(Color.WHITE);
-        mainPnl.setBackground(Color.BLUE);
+        mainPnl.setBackground(new Color(29, 53, 87));
         lblTitre.setText("Fin de partie - " + nomJoueur);
-        lblTitre.setHorizontalAlignment(SwingConstants.CENTER);
+        lblTitre.setAlignmentX(Component.CENTER_ALIGNMENT);
         Font customFont = loadCustomFont(Font.TRUETYPE_FONT, 40);
         lblTitre.setFont(customFont);
 
+        mainPnl.add(lblTitre);
+
 
         JPanel pnlScore = new JPanel(new FlowLayout());
+        pnlScore.setBackground(Color.WHITE);
 
         JLabel lblScoreTitre = new JLabel();
         lblScoreTitre.setText("Score total");
@@ -45,7 +49,7 @@ public class ViewEnd extends Views {
         pnlScore.add(lblScore);
 
 
-        mainPnl.add(lblTitre);
+
         mainPnl.add(pnlScore);
 
         JLabel lblScoreChaqueManche = new JLabel();
@@ -56,18 +60,21 @@ public class ViewEnd extends Views {
         mainPnl.add(lblScoreChaqueManche);
 
         JPanel diagBarres = new JPanel(new FlowLayout());
+        diagBarres.setBackground(Color.WHITE);
 
         for (int j : tabScore) {
             JPanel pnlBarre = new JPanel(new BorderLayout());
+            pnlBarre.setBackground(Color.WHITE);
             JProgressBar barre = new JProgressBar(JProgressBar.VERTICAL, 0, 100); // Orientation verticale et limites min et max
-            barre.setForeground(Color.BLUE);
+            barre.setForeground(new Color(29, 53, 87));
             barre.setBorderPainted(false);
             barre.setPreferredSize(new Dimension(80, 150)); // Définit la largeur et la hauteur de chaque barre
             barre.setValue(0); // Valeur de départ à zéro
 
             JLabel lblBarre = new JLabel(String.valueOf(j));
             lblBarre.setFont(new Font("Arial", Font.BOLD, 20));
-            lblBarre.setForeground(Color.BLUE);
+            lblBarre.setForeground(new Color(29, 53, 87));
+            lblBarre.setHorizontalAlignment(SwingConstants.CENTER);
 
             pnlBarre.add(barre, BorderLayout.CENTER);
             pnlBarre.add(lblBarre, BorderLayout.PAGE_END);
@@ -87,11 +94,13 @@ public class ViewEnd extends Views {
 
 
         JPanel diagBarres2 = new JPanel(new FlowLayout());
+        diagBarres2.setBackground(Color.WHITE);
 
         for (int i = 0; i < tabScore.length; i++) {
             JPanel pnlBarre = new JPanel(new BorderLayout());
+            pnlBarre.setBackground(Color.WHITE);
             JProgressBar barre = new JProgressBar(JProgressBar.VERTICAL, 0, 10); // Orientation verticale et limites min et max
-            barre.setForeground(Color.BLUE);
+            barre.setForeground(new Color(29, 53, 87));
             barre.setBorderPainted(false);
             barre.setPreferredSize(new Dimension(80, 150)); // Définit la largeur et la hauteur de chaque barre
             barre.setValue(0); // Valeur de départ à zéro
@@ -99,7 +108,7 @@ public class ViewEnd extends Views {
             JLabel lblBarre = new JLabel(String.valueOf(tabTenta[i]));
             lblBarre.setFont(new Font("Arial", Font.BOLD, 20));
             lblBarre.setHorizontalAlignment(SwingConstants.CENTER);
-            lblBarre.setForeground(Color.BLUE);
+            lblBarre.setForeground(new Color(29, 53, 87));
 
             pnlBarre.add(barre, BorderLayout.CENTER);
             pnlBarre.add(lblBarre, BorderLayout.PAGE_END);
