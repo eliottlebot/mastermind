@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="ProjetMastermind:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/ProjetMastermind_jar</output-path>
+    <root id="archive" name="ProjetMastermind.jar">
+      <element id="module-output" name="ProjetMastermind" />
+    </root>
+  </artifact>
+</component>
